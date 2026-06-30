@@ -1,8 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Store, CheckCircle2, ArrowLeft } from 'lucide-react'
-import Navigation from '../../components/Navigation/Navigation'
+import { Store, CheckCircle2, AlertCircle } from 'lucide-react'
+import AdminShell from '../../components/admin/AdminShell'
 import api from '../../api/client'
 import type { Categorie } from '../../types/commerce'
 
@@ -28,7 +27,6 @@ const EMPTY: FormState = {
 }
 
 export default function AdminCreateMerchant() {
-  const navigate = useNavigate()
   const [form, setForm] = useState<FormState>(EMPTY)
   const [categories, setCategories] = useState<Categorie[]>([])
   const [saving, setSaving] = useState(false)
@@ -58,124 +56,110 @@ export default function AdminCreateMerchant() {
       setTimeout(() => setSuccess(false), 3000)
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error
-      setError(typeof msg === 'string' ? msg : 'Erreur lors de la création')
+      setError(typeof msg === 'string' ? msg : 'La création a échoué.')
     } finally {
       setSaving(false)
     }
   }
 
-  const input = 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-violet-600/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'
-  const label = 'mb-1.5 block text-sm font-semibold text-slate-600 dark:text-slate-300'
+  const input = 'w-full rounded-lg border border-stone-300 bg-white px-4 py-3 text-sm text-ink-900 outline-none transition-colors focus:border-cobalt-500 dark:border-white/10 dark:bg-ink-800 dark:text-stone-100'
+  const label = 'mb-1.5 block text-sm font-medium text-stone-700 dark:text-stone-300'
+  const section = 'flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-500'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
+    <AdminShell title="Nouveau commerçant" back={{ to: '/admin/commercants', label: 'Commerçants' }} max="max-w-xl">
+      {success && (
+        <p className="mb-4 flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-2.5 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+          <CheckCircle2 size={16} strokeWidth={1.75} /> Compte commerçant créé
+        </p>
+      )}
 
-      <header className="relative flex items-start justify-between px-6 pb-7 pt-12">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate('/admin/users')}
-            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 transition-colors hover:text-primary dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
-          >
-            <ArrowLeft size={18} />
-          </button>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[2px] text-primary-400">Espace administrateur</p>
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">Nouveau commerçant</h1>
+      <motion.form
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-5 rounded-2xl border border-stone-200 bg-white p-6 shadow-card dark:border-white/10 dark:bg-ink-900"
+        noValidate
+      >
+        <p className={section}>
+          <Store size={15} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" /> Compte
+        </p>
+        <div className="flex gap-3">
+          <div className="flex-1">
+            <label className={label} htmlFor="prenom">Prénom</label>
+            <input id="prenom" required className={input} value={form.prenom} onChange={handleChange('prenom')} />
+          </div>
+          <div className="flex-1">
+            <label className={label} htmlFor="nom">Nom</label>
+            <input id="nom" required className={input} value={form.nom} onChange={handleChange('nom')} />
           </div>
         </div>
-        <Navigation />
-      </header>
+        <div>
+          <label className={label} htmlFor="email">Email</label>
+          <input id="email" required type="email" className={input} value={form.email} onChange={handleChange('email')} />
+        </div>
+        <div>
+          <label className={label} htmlFor="password">Mot de passe</label>
+          <input id="password" required type="password" minLength={8} className={input} value={form.password} onChange={handleChange('password')} />
+          <span className="mt-1 block text-xs text-stone-500">8 caractères minimum</span>
+        </div>
 
-      <main className="relative mx-auto w-full max-w-xl px-6 pb-16">
-        {success && (
-          <p className="mb-4 flex items-center gap-2 rounded-xl bg-emerald-500/10 px-4 py-2.5 text-sm font-semibold text-emerald-500">
-            <CheckCircle2 size={16} /> Compte commerçant créé
+        <div className="h-px bg-stone-100 dark:bg-white/10" />
+        <p className={section}>Commerce</p>
+        <div>
+          <label className={label} htmlFor="nomCommerce">Nom du commerce</label>
+          <input id="nomCommerce" required className={input} value={form.nomCommerce} onChange={handleChange('nomCommerce')} />
+        </div>
+        <div>
+          <label className={label} htmlFor="categorieId">Catégorie</label>
+          <select id="categorieId" required className={input} value={form.categorieId} onChange={handleChange('categorieId')}>
+            {categories.map(c => <option key={c.id} value={c.id}>{c.icone ?? ''} {c.nom}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className={label} htmlFor="description">Description</label>
+          <textarea id="description" className={`${input} resize-y`} rows={3} value={form.description} onChange={handleChange('description')} />
+        </div>
+        <div>
+          <label className={label} htmlFor="adresse">Adresse</label>
+          <input id="adresse" required className={input} value={form.adresse} onChange={handleChange('adresse')} />
+        </div>
+        <div className="flex gap-3">
+          <div className="flex-1">
+            <label className={label} htmlFor="ville">Ville</label>
+            <input id="ville" required className={input} value={form.ville} onChange={handleChange('ville')} />
+          </div>
+          <div className="flex-1">
+            <label className={label} htmlFor="codePostal">Code postal</label>
+            <input id="codePostal" required className={input} value={form.codePostal} onChange={handleChange('codePostal')} />
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <div className="flex-1">
+            <label className={label} htmlFor="telephone">Téléphone</label>
+            <input id="telephone" type="tel" className={input} value={form.telephone} onChange={handleChange('telephone')} />
+          </div>
+          <div className="flex-1">
+            <label className={label} htmlFor="siteWeb">Site web</label>
+            <input id="siteWeb" type="url" className={input} value={form.siteWeb} onChange={handleChange('siteWeb')} />
+          </div>
+        </div>
+
+        {error && (
+          <p role="alert" className="flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-sm font-medium text-red-600 dark:text-red-400">
+            <AlertCircle size={16} strokeWidth={1.75} /> {error}
           </p>
         )}
 
-        <motion.form
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
+        <button
+          type="submit"
+          disabled={saving}
+          className="rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600 disabled:opacity-60"
         >
-          <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[2px] text-slate-500">
-            <Store size={15} className="text-primary-400" /> Compte
-          </p>
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <label className={label}>Prénom</label>
-              <input required className={input} value={form.prenom} onChange={handleChange('prenom')} />
-            </div>
-            <div className="flex-1">
-              <label className={label}>Nom</label>
-              <input required className={input} value={form.nom} onChange={handleChange('nom')} />
-            </div>
-          </div>
-          <div>
-            <label className={label}>Email</label>
-            <input required type="email" className={input} value={form.email} onChange={handleChange('email')} />
-          </div>
-          <div>
-            <label className={label}>Mot de passe</label>
-            <input required type="password" minLength={8} className={input} value={form.password} onChange={handleChange('password')} />
-            <span className="mt-1 block text-xs text-slate-500">8 caractères minimum</span>
-          </div>
-
-          <div className="h-px bg-slate-100 dark:bg-slate-800" />
-          <p className="text-sm font-bold uppercase tracking-[2px] text-slate-500">Commerce</p>
-          <div>
-            <label className={label}>Nom du commerce</label>
-            <input required className={input} value={form.nomCommerce} onChange={handleChange('nomCommerce')} />
-          </div>
-          <div>
-            <label className={label}>Catégorie</label>
-            <select required className={input} value={form.categorieId} onChange={handleChange('categorieId')}>
-              {categories.map(c => <option key={c.id} value={c.id}>{c.icone ?? ''} {c.nom}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className={label}>Description</label>
-            <textarea className={`${input} resize-y`} rows={3} value={form.description} onChange={handleChange('description')} />
-          </div>
-          <div>
-            <label className={label}>Adresse</label>
-            <input required className={input} value={form.adresse} onChange={handleChange('adresse')} />
-          </div>
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <label className={label}>Ville</label>
-              <input required className={input} value={form.ville} onChange={handleChange('ville')} />
-            </div>
-            <div className="flex-1">
-              <label className={label}>Code postal</label>
-              <input required className={input} value={form.codePostal} onChange={handleChange('codePostal')} />
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <label className={label}>Téléphone</label>
-              <input type="tel" className={input} value={form.telephone} onChange={handleChange('telephone')} />
-            </div>
-            <div className="flex-1">
-              <label className={label}>Site web</label>
-              <input type="url" className={input} value={form.siteWeb} onChange={handleChange('siteWeb')} />
-            </div>
-          </div>
-
-          {error && <p className="rounded-xl bg-red-500/10 px-4 py-2.5 text-sm font-medium text-red-500">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={saving}
-            className="rounded-xl bg-primary py-3.5 font-bold text-white shadow-glow transition-colors hover:bg-violet-500 disabled:opacity-60"
-          >
-            {saving ? 'Création…' : 'Créer le compte commerçant'}
-          </button>
-        </motion.form>
-      </main>
-    </div>
+          {saving ? 'Création…' : 'Créer le compte commerçant'}
+        </button>
+      </motion.form>
+    </AdminShell>
   )
 }

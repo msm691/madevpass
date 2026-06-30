@@ -146,7 +146,7 @@ export default function Scanner() {
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-slate-950">
+    <div className="fixed inset-0 flex flex-col bg-ink-950">
       {/* Header glassmorphism */}
       <div className="z-10 flex flex-shrink-0 items-center justify-between bg-black/50 p-4 backdrop-blur-xl">
         <button
@@ -163,12 +163,12 @@ export default function Scanner() {
         <div id="qr-reader" className="absolute inset-0" />
 
         {cameraErr ? (
-          <div className="absolute inset-0 z-[5] flex flex-col items-center justify-center gap-4 bg-slate-950 px-8">
-            <Camera size={52} className="text-primary-400" />
-            <p className="max-w-xs text-center leading-relaxed text-slate-400">{cameraErr}</p>
+          <div className="absolute inset-0 z-[5] flex flex-col items-center justify-center gap-4 bg-ink-950 px-8">
+            <Camera size={52} strokeWidth={1.5} className="text-cobalt-400" />
+            <p className="max-w-xs text-center leading-relaxed text-stone-400">{cameraErr}</p>
             <button
               onClick={() => navigate('/commercant')}
-              className="mt-2 rounded-2xl bg-primary px-8 py-3 font-semibold text-white shadow-glow transition-colors hover:bg-violet-500"
+              className="mt-2 rounded-xl bg-cobalt-500 px-8 py-3 font-semibold text-white shadow-cobalt transition-colors hover:bg-cobalt-600"
             >
               Retour
             </button>
@@ -186,9 +186,9 @@ export default function Scanner() {
                 initial={{ top: '4%' }}
                 animate={{ top: ['4%', '96%', '4%'] }}
                 transition={{ duration: 2.6, ease: 'easeInOut', repeat: Infinity }}
-                className="absolute left-2 right-2 h-0.5 rounded-full bg-primary shadow-[0_0_14px_4px_rgba(124,58,237,0.8)]"
+                className="absolute left-2 right-2 h-0.5 rounded-full bg-cobalt-500 shadow-[0_0_14px_4px_rgba(35,71,230,0.8)]"
               />
-              <div className="absolute inset-0 bg-primary/5" />
+              <div className="absolute inset-0 bg-cobalt-500/5" />
             </div>
             <p className="px-8 text-center text-sm font-medium text-white/85">
               Pointez la caméra sur le QR code étudiant
@@ -196,11 +196,11 @@ export default function Scanner() {
           </div>
         ) : (
           // État inactif : écran noir + FAB massif pour dégainer la caméra
-          <div className="absolute inset-0 z-[5] flex flex-col items-center justify-center gap-10 bg-slate-950 px-8">
+          <div className="absolute inset-0 z-[5] flex flex-col items-center justify-center gap-10 bg-ink-950 px-8">
             <div className="flex flex-col items-center gap-3 text-center">
-              <ScanLine size={56} className="text-primary-400" />
-              <p className="text-lg font-bold text-white">Prêt à encaisser</p>
-              <p className="max-w-xs text-sm leading-relaxed text-slate-400">
+              <ScanLine size={56} strokeWidth={1.5} className="text-cobalt-400" />
+              <p className="font-display text-lg font-semibold text-white">Prêt à encaisser</p>
+              <p className="max-w-xs text-sm leading-relaxed text-stone-400">
                 Démarrez la caméra pour valider le passage d'un étudiant.
               </p>
             </div>
@@ -209,10 +209,10 @@ export default function Scanner() {
               onClick={startScan}
               disabled={starting}
               whileTap={{ scale: 0.94 }}
-              className="flex h-40 w-40 flex-col items-center justify-center gap-2 rounded-full bg-primary text-white shadow-[0_0_60px_-4px_rgba(124,58,237,0.9)] ring-8 ring-primary/20 transition-colors hover:bg-violet-500 disabled:opacity-70"
+              className="flex h-40 w-40 flex-col items-center justify-center gap-2 rounded-full bg-cobalt-500 text-white shadow-[0_0_60px_-4px_rgba(35,71,230,0.9)] ring-8 ring-cobalt-500/20 transition-colors hover:bg-cobalt-600 disabled:opacity-70"
             >
-              <Camera size={46} />
-              <span className="text-sm font-extrabold uppercase tracking-wider">
+              <Camera size={46} strokeWidth={1.75} />
+              <span className="text-sm font-bold uppercase tracking-wider">
                 {starting ? 'Activation…' : 'Démarrer'}
               </span>
             </motion.button>
@@ -237,7 +237,7 @@ export default function Scanner() {
               transition={{ type: 'spring', damping: 28, stiffness: 320 }}
               onClick={e => e.stopPropagation()}
               className={cn(
-                'w-full max-w-md rounded-t-3xl border-t-4 bg-white px-7 pb-11 pt-8 dark:bg-slate-900',
+                'w-full max-w-md rounded-t-3xl border-t-4 bg-white px-7 pb-11 pt-8 dark:bg-ink-900',
                 feedback.ok ? 'border-emerald-500' : 'border-red-500',
               )}
             >
@@ -246,10 +246,10 @@ export default function Scanner() {
                   'flex h-16 w-16 items-center justify-center rounded-full',
                   feedback.ok ? 'bg-emerald-500/15 text-emerald-500' : 'bg-red-500/15 text-red-500',
                 )}>
-                  {feedback.ok ? <Check size={30} /> : <X size={30} />}
+                  {feedback.ok ? <Check size={30} strokeWidth={2} /> : <X size={30} strokeWidth={2} />}
                 </div>
-                <p className="text-xl font-extrabold text-slate-900 dark:text-slate-100">{feedback.title}</p>
-                <p className="text-center text-sm leading-relaxed text-slate-500">{feedback.message}</p>
+                <p className="font-display text-xl font-bold text-ink-900 dark:text-white">{feedback.title}</p>
+                <p className="text-center text-sm leading-relaxed text-stone-500">{feedback.message}</p>
                 <button
                   onClick={dismiss}
                   className={cn(

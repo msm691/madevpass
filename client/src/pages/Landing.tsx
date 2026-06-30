@@ -3,130 +3,131 @@ import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Marquee from 'react-fast-marquee'
 import {
-  ScanLine, MapPin, Tag, ShieldCheck, ArrowRight, Sparkles, Check,
-  GraduationCap, Store, BarChart3, Menu, X, Star,
+  ScanLine, MapPin, Tag, ShieldCheck, ArrowRight, Check,
+  GraduationCap, Store, BarChart3, Menu, X,
   Coffee, UtensilsCrossed, Dumbbell, BookOpen, Scissors, ShoppingBag, Film, Bus,
 } from 'lucide-react'
 import HeroVisual from '../components/landing/HeroVisual'
-import Background3D from '../components/landing/Background3D'
-import GradientBorderCard from '../components/landing/GradientBorderCard'
 import AnimatedCounter from '../components/landing/AnimatedCounter'
 import ThemeToggle from '../components/ui/ThemeToggle'
-import { useTheme } from '../theme/ThemeProvider'
 import { cn } from '../lib/utils'
 
-const fadeUp = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0 } }
+const ICON = { size: 20, strokeWidth: 1.75 } as const
+const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }
+const spring = { type: 'spring', stiffness: 380, damping: 32 } as const
 
 export default function Landing() {
-  const { theme } = useTheme()
   const { scrollYProgress } = useScroll()
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-200">
-      <Background3D dark={theme === 'dark'} />
-      {/* Barre de progression scroll-driven */}
-      <motion.div style={{ scaleX: scrollYProgress }} className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-gradient-to-r from-primary-400 via-violet-400 to-fuchsia-400" />
+    <div className="grain relative min-h-screen overflow-x-hidden text-ink-900 antialiased dark:text-stone-200">
+      <Ambient />
+      <motion.div style={{ scaleX: scrollYProgress }} className="fixed inset-x-0 top-0 z-overlay h-0.5 origin-left bg-cobalt-500" />
 
       <Navbar />
       <Hero />
       <PartnerMarquee />
       <Stats />
       <Features />
-      <ParallaxShowcase />
+      <Spaces />
       <CtaBand />
       <Footer />
     </div>
   )
 }
 
-/* ─── Navbar ─────────────────────────────────────────────── */
+/* Ambient cobalt intentionnel (remplace le fond 3D générique) */
+function Ambient() {
+  return (
+    <div className="pointer-events-none fixed inset-0 -z-10 bg-cream dark:bg-ink-950">
+      <div className="absolute -top-48 left-1/2 h-[620px] w-[920px] -translate-x-1/2 rounded-full bg-cobalt-500/[0.10] blur-[130px] dark:bg-cobalt-600/20" />
+      <div className="absolute bottom-[-10%] right-[-5%] h-[420px] w-[520px] rounded-full bg-cobalt-400/[0.06] blur-[110px] dark:bg-cobalt-500/10" />
+    </div>
+  )
+}
+
+/* ─── Navbar (single-line desktop, ≤72px) ─────────────────── */
 function Navbar() {
   const [open, setOpen] = useState(false)
+  const links = [
+    { href: '#fonctionnement', label: 'Fonctionnement' },
+    { href: '#espaces', label: 'Les espaces' },
+    { href: '#partenaires', label: 'Partenaires' },
+  ]
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-3 sm:px-6 sm:pt-4">
-      <div className="mx-auto flex max-w-6xl items-center justify-between rounded-2xl border border-slate-200/70 bg-white/70 px-4 py-2.5 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/60 sm:px-5">
-        <span className="bg-gradient-to-r from-primary-500 to-violet-400 bg-clip-text text-lg font-extrabold tracking-tight text-transparent sm:text-xl">
-          MADEV Pass
-        </span>
+    <header className="fixed inset-x-0 top-0 z-nav px-4 pt-3 sm:px-6 sm:pt-4">
+      <nav className="glass mx-auto flex h-14 max-w-6xl items-center justify-between rounded-2xl px-4 sm:px-5">
+        <a href="#top" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight text-ink-900 dark:text-white">
+          <span className="grid h-7 w-7 place-items-center rounded-lg bg-cobalt-500 text-white shadow-cobalt-sm"><span className="text-sm font-black">M</span></span>
+          MADEV&nbsp;Pass
+        </a>
 
-        <div className="hidden items-center gap-2.5 md:flex">
+        <div className="hidden items-center gap-1 md:flex">
+          {links.map((l) => (
+            <a key={l.href} href={l.href} className="rounded-lg px-3 py-2 text-sm font-medium text-stone-600 transition-colors hover:text-cobalt-600 dark:text-stone-300 dark:hover:text-cobalt-300">{l.label}</a>
+          ))}
+        </div>
+
+        <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
-          <Link to="/login" className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-600 transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary-400">
-            Connexion
-          </Link>
-          <Link to="/register" className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white shadow-glow transition-colors hover:bg-violet-500">
-            S'inscrire
-          </Link>
+          <Link to="/login" className="rounded-xl px-3.5 py-2 text-sm font-semibold text-stone-700 transition-colors hover:text-cobalt-600 dark:text-stone-200 dark:hover:text-cobalt-300">Se connecter</Link>
+          <Btn to="/register">Créer mon compte</Btn>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
           <ThemeToggle />
-          <button onClick={() => setOpen(o => !o)} className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-700 dark:border-white/10 dark:text-slate-200" aria-label="Menu">
-            {open ? <X size={18} /> : <Menu size={18} />}
+          <button onClick={() => setOpen(o => !o)} className="grid h-9 w-9 place-items-center rounded-xl border border-stone-300 text-stone-700 dark:border-white/10 dark:text-stone-200" aria-label="Ouvrir le menu" aria-expanded={open}>
+            {open ? <X {...ICON} /> : <Menu {...ICON} />}
           </button>
         </div>
-      </div>
+      </nav>
 
       {open && (
-        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mx-auto mt-2 flex max-w-6xl flex-col gap-2 rounded-2xl border border-slate-200 bg-white/95 p-3 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/90 md:hidden">
-          <Link to="/login" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-500/10 dark:text-slate-200">Connexion</Link>
-          <Link to="/register" onClick={() => setOpen(false)} className="rounded-xl bg-primary px-4 py-3 text-center text-sm font-bold text-white">S'inscrire gratuitement</Link>
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="glass mx-auto mt-2 flex max-w-6xl flex-col gap-1 rounded-2xl p-3 md:hidden">
+          {links.map((l) => (
+            <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm font-medium text-stone-700 hover:bg-cobalt-500/10 dark:text-stone-200">{l.label}</a>
+          ))}
+          <Link to="/login" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm font-semibold text-stone-700 hover:bg-cobalt-500/10 dark:text-stone-200">Se connecter</Link>
+          <Link to="/register" onClick={() => setOpen(false)} className="mt-1 rounded-xl bg-cobalt-500 px-4 py-3 text-center text-sm font-bold text-white">Créer mon compte</Link>
         </motion.div>
       )}
     </header>
   )
 }
 
-/* ─── Hero ───────────────────────────────────────────────── */
+/* ─── Hero (split, max 4 éléments texte, pas de gradient-clip) ─ */
 function Hero() {
   return (
-    <section className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 pb-16 pt-28 sm:px-6 md:grid-cols-2 md:pb-24 md:pt-40">
-      <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.12 }} className="relative z-10 text-center md:text-left">
-        <motion.span variants={fadeUp} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary dark:text-primary-400">
-          <Sparkles size={13} /> Carte étudiante numérique · Vienne
+    <section id="top" className="relative mx-auto grid min-h-[100dvh] max-w-6xl items-center gap-10 px-5 pb-16 pt-28 sm:px-6 md:grid-cols-2 md:pb-20 md:pt-24">
+      <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.1 }} className="relative z-10 text-center md:text-left">
+        <motion.span variants={fadeUp} className="inline-flex items-center gap-2 rounded-full border border-cobalt-500/25 bg-cobalt-500/10 px-3.5 py-1.5 text-xs font-semibold text-cobalt-700 dark:text-cobalt-300">
+          <span className="h-1.5 w-1.5 rounded-full bg-cobalt-500" /> Carte étudiante numérique · Vienne
         </motion.span>
 
-        <motion.h1 variants={fadeUp} className="mt-5 text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 dark:text-white sm:text-5xl md:text-6xl">
-          La carte étudiante{' '}
-          <span className="bg-gradient-to-r from-primary-500 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-violet-400 dark:to-fuchsia-400">réinventée</span>
+        <motion.h1 variants={fadeUp} className="mt-5 font-display text-5xl font-bold leading-[1.02] tracking-tight text-ink-900 dark:text-white sm:text-6xl">
+          La carte étudiante,<br /><span className="text-cobalt-600 dark:text-cobalt-400">enfin numérique.</span>
         </motion.h1>
 
-        <motion.p variants={fadeUp} className="mx-auto mt-5 max-w-md text-base leading-relaxed text-slate-600 dark:text-slate-400 sm:text-lg md:mx-0">
-          Un QR code, des centaines de partenaires locaux. Scan instantané, offres exclusives
-          et sécurité RGPD pour les étudiants et commerçants de Vienne.
+        <motion.p variants={fadeUp} className="mx-auto mt-5 max-w-md text-pretty text-base leading-relaxed text-stone-600 dark:text-stone-400 sm:text-lg md:mx-0">
+          Un QR code, des centaines de partenaires locaux. Scan instantané, offres réservées aux étudiants, sécurité RGPD.
         </motion.p>
 
         <motion.div variants={fadeUp} className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center md:justify-start">
-          <Link to="/register" className="group flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-4 text-base font-bold text-white shadow-glow transition-all hover:scale-[0.98] hover:bg-violet-500">
-            <GraduationCap size={18} /> S'inscrire Étudiant
-            <ArrowRight size={17} className="transition-transform group-hover:translate-x-1" />
+          <Btn to="/register" size="lg" icon><GraduationCap {...ICON} /> Créer mon compte</Btn>
+          <Link to="/login" className="inline-flex items-center justify-center gap-2 rounded-xl border border-stone-300 px-6 py-3.5 text-base font-semibold text-stone-700 transition-all hover:border-cobalt-500/50 hover:text-cobalt-600 active:scale-[0.98] dark:border-white/10 dark:text-stone-200 dark:hover:text-cobalt-300">
+            <Store {...ICON} /> Je suis commerçant
           </Link>
-          <Link to="/login" className="flex items-center justify-center gap-2 rounded-2xl border border-slate-300 px-6 py-4 text-base font-bold text-slate-700 transition-all hover:scale-[0.98] hover:border-primary/60 hover:text-primary dark:border-slate-700 dark:text-slate-200 dark:hover:text-primary-400">
-            <Store size={18} /> Espace Commerçant
-          </Link>
-        </motion.div>
-
-        <motion.div variants={fadeUp} className="mt-7 flex items-center justify-center gap-4 md:justify-start">
-          <div className="flex -space-x-2">
-            {['from-sky-400 to-primary', 'from-amber-400 to-primary', 'from-emerald-400 to-primary', 'from-fuchsia-400 to-primary'].map((g, i) => (
-              <div key={i} className={`h-8 w-8 rounded-full border-2 border-white bg-gradient-to-br dark:border-slate-950 ${g}`} />
-            ))}
-          </div>
-          <div className="text-left">
-            <div className="flex gap-0.5 text-amber-400">{Array.from({ length: 5 }).map((_, i) => <Star key={i} size={13} fill="currentColor" />)}</div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Adopté par les étudiants de Vienne</p>
-          </div>
         </motion.div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, ease: 'easeOut' }} className="relative z-10 h-[360px] sm:h-[440px] md:h-[500px]">
+      <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} className="relative z-10 h-[360px] sm:h-[440px] md:h-[500px]">
         <HeroVisual />
       </motion.div>
     </section>
   )
 }
 
-/* ─── Partner Marquee ────────────────────────────────────── */
+/* ─── Partner Marquee (logo wall, sans eyebrow) ───────────── */
 const PARTNERS = [
   { icon: Coffee, label: 'Cafés' }, { icon: UtensilsCrossed, label: 'Restaurants' },
   { icon: Dumbbell, label: 'Sport' }, { icon: BookOpen, label: 'Librairies' },
@@ -135,17 +136,15 @@ const PARTNERS = [
 ]
 
 function PartnerMarquee() {
-  const { theme } = useTheme()
   return (
-    <section className="relative border-y border-slate-200 bg-white/40 py-8 backdrop-blur-sm dark:border-slate-900 dark:bg-slate-950/40">
-      <p className="mb-6 text-center text-xs font-bold uppercase tracking-[3px] text-slate-400 dark:text-slate-500">Plus de 8 catégories de partenaires</p>
-      <Marquee gradient gradientColor={theme === 'dark' ? '#020617' : '#ffffff'} gradientWidth={80} speed={40} pauseOnHover>
+    <section id="partenaires" className="relative border-y border-stone-200/70 py-7 dark:border-white/5">
+      <Marquee gradient gradientColor="transparent" speed={38} pauseOnHover>
         {PARTNERS.map((p) => {
           const Icon = p.icon
           return (
-            <div key={p.label} className="mx-4 flex items-center gap-2.5 rounded-2xl border border-slate-200 bg-white/70 px-5 py-3 text-slate-700 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300">
-              <Icon size={18} className="text-primary dark:text-primary-400" />
-              <span className="text-sm font-semibold">{p.label}</span>
+            <div key={p.label} className="mx-3 flex items-center gap-2.5 rounded-xl border border-stone-200 bg-white/60 px-5 py-2.5 text-stone-700 backdrop-blur-sm dark:border-white/10 dark:bg-ink-900/50 dark:text-stone-300">
+              <Icon size={18} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" />
+              <span className="text-sm font-medium">{p.label}</span>
             </div>
           )
         })}
@@ -154,26 +153,24 @@ function PartnerMarquee() {
   )
 }
 
-/* ─── Stats (données réelles Vienne) ─────────────────────── */
+/* ─── Stats (chiffres mono tabulaires, dividers au lieu de cartes) ─ */
 const STATS = [
   { to: 470, suffix: '+', label: 'Commerçants partenaires' },
   { to: 1920, suffix: '', label: 'Étudiants inscrits' },
   { to: 100, suffix: '%', label: 'Conforme RGPD' },
-  { to: 2, suffix: ' clics', label: 'Pour s\'inscrire' },
+  { to: 2, suffix: ' clics', label: 'Pour s’inscrire' },
 ]
 
 function Stats() {
   return (
-    <section className="relative mx-auto max-w-6xl px-5 py-16 sm:px-6">
-      <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
+    <section className="relative mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-20">
+      <div className="grid grid-cols-2 divide-stone-200/70 dark:divide-white/10 md:grid-cols-4 md:divide-x">
         {STATS.map((s, i) => (
-          <Reveal key={s.label} delay={i * 0.08}>
-            <div className="rounded-2xl border border-slate-200 bg-white/70 p-5 text-center backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/50 sm:p-6">
-              <p className="bg-gradient-to-r from-primary-500 to-violet-400 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent dark:from-primary-400 dark:to-violet-300 sm:text-4xl">
-                <AnimatedCounter to={s.to} suffix={s.suffix} />
-              </p>
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400 sm:text-sm">{s.label}</p>
-            </div>
+          <Reveal key={s.label} delay={i * 0.06} className="px-2 py-4 text-center md:px-6">
+            <p className="tnum font-display text-4xl font-bold tracking-tight text-ink-900 dark:text-white sm:text-5xl">
+              <AnimatedCounter to={s.to} suffix={s.suffix} />
+            </p>
+            <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">{s.label}</p>
           </Reveal>
         ))}
       </div>
@@ -181,48 +178,43 @@ function Stats() {
   )
 }
 
-/* ─── Features (éditorial : numéros fantômes + bordure animée) ─ */
+/* ─── Features (bento asymétrique, eyebrow #2 autorisé) ──── */
 const FEATURES = [
-  { icon: ScanLine, title: 'Scan instantané', desc: 'Validation des passages en moins d\'une seconde via un QR code sécurisé à rotation. Aucune carte physique, aucune attente.' },
-  { icon: MapPin, title: 'Annuaire local', desc: 'Tous les partenaires de Vienne, filtrés par catégorie et proximité géographique, mis à jour en continu.' },
-  { icon: Tag, title: 'Gestion d\'offres', desc: 'Les commerçants créent, modifient et pilotent leurs remises en temps réel depuis un tableau de bord dédié.' },
-  { icon: ShieldCheck, title: 'Sécurité RGPD', desc: 'Données chiffrées, consentement explicite, droit à l\'oubli et suppression de compte 100% conforme.' },
+  { icon: ScanLine, title: 'Scan en moins d’une seconde', desc: 'Un QR code qui tourne toutes les 5 minutes, validé d’un geste par le commerçant. Aucune carte physique, aucune attente en caisse.', span: 'md:col-span-4', tint: true },
+  { icon: MapPin, title: 'Annuaire local', desc: 'Tous les partenaires de Vienne, filtrés par catégorie et par distance.', span: 'md:col-span-2' },
+  { icon: Tag, title: 'Offres pilotées en temps réel', desc: 'Les commerçants créent et ajustent leurs remises depuis leur tableau de bord.', span: 'md:col-span-3' },
+  { icon: ShieldCheck, title: 'Conforme RGPD', desc: 'Données chiffrées, consentement explicite, droit à l’oubli et suppression de compte.', span: 'md:col-span-3' },
 ]
 
 function Features() {
   return (
-    <section className="relative mx-auto max-w-5xl px-5 py-20 sm:px-6 sm:py-24">
+    <section id="fonctionnement" className="relative mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-24">
       <Reveal>
-        <p className="text-center text-xs font-bold uppercase tracking-[3px] text-primary dark:text-primary-400">Bénéfices</p>
-        <h2 className="mx-auto mt-3 max-w-2xl text-center text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-          Pensé pour connecter étudiants & commerçants
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cobalt-600 dark:text-cobalt-400">Comment ça marche</p>
+        <h2 className="mt-3 max-w-xl font-display text-3xl font-bold tracking-tight text-ink-900 dark:text-white sm:text-4xl">
+          Pensé pour connecter étudiants et commerçants
         </h2>
       </Reveal>
 
-      <div className="mt-14 flex flex-col gap-7 sm:gap-9">
+      <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-6">
         {FEATURES.map((f, i) => {
           const Icon = f.icon
           return (
-            <Reveal key={f.title} delay={i * 0.05}>
-              <div className={cn('flex flex-col items-center gap-5 sm:gap-8 md:flex-row', i % 2 === 1 && 'md:flex-row-reverse')}>
-                <span
-                  className="select-none text-6xl font-black leading-none text-transparent sm:text-8xl"
-                  style={{ WebkitTextStroke: '1.5px rgba(124,58,237,0.45)' }}
-                >
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <GradientBorderCard className="w-full md:flex-1" speed={0.18 + i * 0.04}>
-                  <div className="flex items-start gap-5 p-7 sm:p-8">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary dark:text-primary-400">
-                      <Icon size={24} />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900 dark:text-white sm:text-xl">{f.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{f.desc}</p>
-                    </div>
-                  </div>
-                </GradientBorderCard>
-              </div>
+            <Reveal key={f.title} delay={i * 0.06} className={f.span}>
+              <article className={cn(
+                'group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border p-6 transition-shadow sm:p-7',
+                f.tint
+                  ? 'border-cobalt-500/20 bg-cobalt-500/[0.06] dark:border-cobalt-400/15 dark:bg-cobalt-500/10'
+                  : 'border-stone-200 bg-white/70 hover:shadow-card-hover dark:border-white/10 dark:bg-ink-900/55',
+              )}>
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cobalt-500/12 text-cobalt-600 dark:text-cobalt-300">
+                  <Icon size={22} strokeWidth={1.75} />
+                </div>
+                <div>
+                  <h3 className="font-display text-lg font-semibold text-ink-900 dark:text-white">{f.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">{f.desc}</p>
+                </div>
+              </article>
             </Reveal>
           )
         })}
@@ -231,78 +223,79 @@ function Features() {
   )
 }
 
-/* ─── Parallax Showcase ──────────────────────────────────── */
-const PANELS = [
-  { icon: GraduationCap, label: 'Espace Étudiant', tint: 'from-sky-500/20 to-primary/20' },
-  { icon: Store, label: 'Espace Commerçant', tint: 'from-amber-500/20 to-primary/20' },
-  { icon: BarChart3, label: 'Espace Admin', tint: 'from-emerald-500/20 to-primary/20' },
+/* ─── Spaces (liste verticale divisée — autre famille de layout) ─ */
+const SPACES = [
+  { icon: GraduationCap, name: 'Étudiant', points: ['Carte numérique + QR sécurisé', 'Annuaire & favoris', 'Offres réservées'] },
+  { icon: Store, name: 'Commerçant', points: ['Scan des passages', 'Gestion des offres', 'Statistiques de fréquentation'] },
+  { icon: BarChart3, name: 'Administrateur', points: ['Validation des inscriptions', 'Gestion du réseau', 'Rapports conformes RGPD'] },
 ]
 
-function ParallaxShowcase() {
+function Spaces() {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const yUp = useTransform(scrollYProgress, [0, 1], [80, -80])
-  const yDown = useTransform(scrollYProgress, [0, 1], [-60, 80])
+  const y = useTransform(scrollYProgress, [0, 1], [40, -40])
 
   return (
-    <section ref={ref} className="relative mx-auto max-w-6xl px-5 py-20 sm:px-6 sm:py-24">
-      <Reveal>
-        <p className="text-center text-xs font-bold uppercase tracking-[3px] text-primary dark:text-primary-400">Showcase</p>
-        <h2 className="mx-auto mt-3 max-w-2xl text-center text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-          Trois interfaces, une expérience premium
-        </h2>
-      </Reveal>
+    <section id="espaces" ref={ref} className="relative mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-24">
+      <div className="grid gap-10 md:grid-cols-[0.9fr_1.4fr] md:gap-16">
+        <Reveal className="md:sticky md:top-28 md:self-start">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink-900 dark:text-white sm:text-4xl">
+            Trois espaces, une même carte
+          </h2>
+          <p className="mt-4 max-w-sm text-stone-600 dark:text-stone-400">
+            Chaque rôle dispose de son interface dédiée, connectée au même réseau local.
+          </p>
+        </Reveal>
 
-      <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3" style={{ perspective: 1200 }}>
-        {PANELS.map((p, i) => {
-          const Icon = p.icon
-          return (
-            <motion.div key={p.label} style={{ y: i === 1 ? yDown : yUp }} className={`relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br p-1 dark:border-slate-800 ${p.tint}`}>
-              <div className="rounded-[0.9rem] bg-white/80 p-6 backdrop-blur-xl dark:bg-slate-900/80">
-                <div className="mb-5 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary dark:text-primary-400"><Icon size={20} /></div>
-                  <span className="font-bold text-slate-900 dark:text-white">{p.label}</span>
-                </div>
-                <div className="space-y-3">
-                  <div className="h-24 rounded-xl bg-gradient-to-br from-slate-100 to-violet-200/60 shadow-glow-sm dark:from-slate-800 dark:to-violet-950/60" />
-                  <div className="h-3 w-3/4 rounded-full bg-slate-200 dark:bg-slate-700" />
-                  <div className="h-3 w-1/2 rounded-full bg-slate-100 dark:bg-slate-800" />
-                  <div className="flex gap-2 pt-1">
-                    <div className="h-8 flex-1 rounded-lg bg-primary/30" />
-                    <div className="h-8 w-12 rounded-lg bg-slate-200 dark:bg-slate-800" />
+        <motion.div style={{ y }} className="divide-y divide-stone-200/80 dark:divide-white/10">
+          {SPACES.map((s, i) => {
+            const Icon = s.icon
+            return (
+              <Reveal key={s.name} delay={i * 0.06} className="py-6 first:pt-0">
+                <div className="flex items-start gap-5">
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-cobalt-500/12 text-cobalt-600 dark:text-cobalt-300">
+                    <Icon size={24} strokeWidth={1.75} />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-display text-xl font-semibold text-ink-900 dark:text-white">{s.name}</h3>
+                    <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+                      {s.points.map((p) => (
+                        <li key={p} className="flex items-center gap-1.5 text-sm text-stone-600 dark:text-stone-400">
+                          <Check size={15} strokeWidth={2.25} className="text-cobalt-600 dark:text-cobalt-400" /> {p}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          )
-        })}
+              </Reveal>
+            )
+          })}
+        </motion.div>
       </div>
     </section>
   )
 }
 
-/* ─── CTA Band (unique zone de conversion) ───────────────── */
+/* ─── CTA Band (zone de conversion unique) ────────────────── */
 function CtaBand() {
   return (
     <section className="relative mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-20">
       <Reveal>
-        <div className="glow-ring relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-white via-violet-100/60 to-white px-6 py-12 text-center dark:from-slate-900 dark:via-violet-950/60 dark:to-slate-900 sm:px-12 sm:py-16">
-          <div className="pointer-events-none absolute -top-20 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/30 blur-[100px]" />
-          <h2 className="relative text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">Prêt à rejoindre MADEV Pass ?</h2>
-          <p className="relative mx-auto mt-4 max-w-lg text-slate-600 dark:text-slate-300">
-            Inscription gratuite en 2 clics. Activez votre carte et profitez immédiatement des offres.
+        <div className="glow-ring relative overflow-hidden rounded-3xl bg-ink-950 px-6 py-12 text-center sm:px-12 sm:py-16">
+          <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-cobalt-500/40 blur-[110px]" />
+          <h2 className="relative font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Activez votre carte en 2 clics</h2>
+          <p className="relative mx-auto mt-4 max-w-md text-stone-300">
+            Inscription gratuite. Validez votre statut étudiant et profitez des offres immédiatement.
           </p>
-          <div className="relative mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link to="/register" className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-7 py-4 font-bold text-white shadow-glow transition-all hover:scale-[0.98] hover:bg-violet-500 sm:w-auto">
-              Créer mon compte <ArrowRight size={17} />
-            </Link>
-            <Link to="/login" className="flex w-full items-center justify-center rounded-2xl border border-slate-300 px-7 py-4 font-bold text-slate-700 transition-all hover:scale-[0.98] hover:border-primary/60 dark:border-slate-600 dark:text-slate-200 sm:w-auto">
-              J'ai déjà un compte
+          <div className="relative mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Btn to="/register" size="lg" icon>Créer mon compte <ArrowRight {...ICON} /></Btn>
+            <Link to="/login" className="inline-flex w-full items-center justify-center rounded-xl border border-white/15 px-6 py-3.5 font-semibold text-white transition-all hover:border-white/40 active:scale-[0.98] sm:w-auto">
+              Se connecter
             </Link>
           </div>
-          <div className="relative mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-500 dark:text-slate-400">
+          <div className="relative mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-stone-400">
             {['Sans engagement', 'Données chiffrées', 'Conforme RGPD'].map((t) => (
-              <span key={t} className="flex items-center gap-1.5"><Check size={13} className="text-emerald-500 dark:text-emerald-400" /> {t}</span>
+              <span key={t} className="flex items-center gap-1.5"><Check size={14} strokeWidth={2.25} className="text-cobalt-400" /> {t}</span>
             ))}
           </div>
         </div>
@@ -311,23 +304,68 @@ function CtaBand() {
   )
 }
 
-/* ─── Footer (sans CTA dupliqué) ─────────────────────────── */
+/* ─── Footer (nav + légal) ────────────────────────────────── */
 function Footer() {
   return (
-    <footer className="relative border-t border-slate-200 px-5 py-12 dark:border-slate-800 sm:px-6">
-      <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-4 text-center">
-        <span className="bg-gradient-to-r from-primary-500 to-violet-400 bg-clip-text text-2xl font-extrabold tracking-tight text-transparent">MADEV Pass</span>
-        <p className="max-w-sm text-sm text-slate-500">La carte étudiante numérique de Vienne et son réseau de commerçants partenaires.</p>
-        <p className="mt-2 text-xs text-slate-400 dark:text-slate-600">© {new Date().getFullYear()} MADEV Pass · Tous droits réservés</p>
+    <footer className="relative border-t border-stone-200/70 px-5 py-12 dark:border-white/10 sm:px-6">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-start md:justify-between">
+        <div className="max-w-sm">
+          <span className="flex items-center gap-2 font-display text-xl font-bold tracking-tight text-ink-900 dark:text-white">
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-cobalt-500 text-sm font-black text-white">M</span> MADEV Pass
+          </span>
+          <p className="mt-3 text-sm text-stone-500 dark:text-stone-400">La carte étudiante numérique de Vienne et son réseau de commerçants partenaires.</p>
+        </div>
+        <nav className="flex flex-wrap gap-x-10 gap-y-6 text-sm">
+          <FooterCol title="Produit" links={[['Fonctionnement', '#fonctionnement'], ['Les espaces', '#espaces'], ['Partenaires', '#partenaires']]} />
+          <FooterCol title="Compte" links={[['Créer un compte', '/register'], ['Se connecter', '/login']]} />
+          <FooterCol title="Légal" links={[['Confidentialité', '/confidentialite'], ['Conditions', '/conditions'], ['RGPD', '/rgpd']]} />
+        </nav>
+      </div>
+      <div className="mx-auto mt-10 max-w-6xl border-t border-stone-200/70 pt-6 text-xs text-stone-400 dark:border-white/10 dark:text-stone-500">
+        © {new Date().getFullYear()} MADEV Pass · Vienne
       </div>
     </footer>
   )
 }
 
-/* ─── Helper : scroll reveal ─────────────────────────────── */
+function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
+  return (
+    <div>
+      <p className="mb-3 font-semibold text-ink-900 dark:text-white">{title}</p>
+      <ul className="flex flex-col gap-2">
+        {links.map(([label, href]) => (
+          <li key={label}>
+            {href.startsWith('#')
+              ? <a href={href} className="text-stone-500 transition-colors hover:text-cobalt-600 dark:text-stone-400 dark:hover:text-cobalt-300">{label}</a>
+              : <Link to={href} className="text-stone-500 transition-colors hover:text-cobalt-600 dark:text-stone-400 dark:hover:text-cobalt-300">{label}</Link>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+/* ─── Primitives ──────────────────────────────────────────── */
+function Btn({ to, children, size = 'md', icon = false }: { to: string; children: React.ReactNode; size?: 'md' | 'lg'; icon?: boolean }) {
+  return (
+    <motion.div whileTap={{ scale: 0.98 }} transition={spring} className={cn(size === 'lg' && 'w-full sm:w-auto')}>
+      <Link
+        to={to}
+        className={cn(
+          'inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cobalt-500 font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600',
+          size === 'lg' ? 'px-6 py-3.5 text-base' : 'px-4 py-2 text-sm',
+          icon && 'group',
+        )}
+      >
+        {children}
+      </Link>
+    </motion.div>
+  )
+}
+
 function Reveal({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
   return (
-    <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.5, delay, ease: 'easeOut' }} className={className}>
+    <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }} className={className}>
       {children}
     </motion.div>
   )

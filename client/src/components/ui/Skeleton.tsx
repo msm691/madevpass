@@ -8,7 +8,7 @@ export default function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'relative overflow-hidden rounded-2xl bg-slate-200/70 dark:bg-slate-800/60',
+        'relative overflow-hidden rounded-2xl bg-stone-200/70 dark:bg-ink-800',
         className,
       )}
     >
@@ -19,7 +19,7 @@ export default function Skeleton({ className }: SkeletonProps) {
 
 export function MerchantCardSkeleton() {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+    <div className="flex items-center gap-4 rounded-2xl border border-stone-200 bg-white p-4 dark:border-white/10 dark:bg-ink-900">
       <Skeleton className="h-16 w-16 flex-shrink-0 rounded-xl" />
       <div className="flex flex-1 flex-col gap-2.5">
         <Skeleton className="h-4 w-2/3 rounded-md" />

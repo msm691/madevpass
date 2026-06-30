@@ -129,35 +129,35 @@ export default function Profile() {
     if (file) uploadDocument(file)
   }
 
-  const center = 'flex h-screen items-center justify-center text-slate-500 dark:text-slate-400'
+  const center = 'flex h-screen items-center justify-center text-stone-500 dark:text-stone-400'
   if (loading) return <div className={center}>Chargement…</div>
   if (!user) return <div className={center}>Erreur de chargement</div>
 
   const pending = user.statutSuppression === 'PENDING_DELETION'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
+    <div className="relative min-h-screen overflow-hidden bg-cream dark:bg-ink-950">
       <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
 
       <header className="relative flex items-start justify-between px-6 pb-8 pt-12">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[2px] text-primary-400">Informations</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">{user.prenom} {user.nom}</h1>
+          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink-900 dark:text-stone-50">{user.prenom} {user.nom}</h1>
         </div>
         <Navigation />
       </header>
 
       <main className="relative mx-auto w-full max-w-xl px-6 pb-16">
-        <p className="mb-3 text-xs font-bold uppercase tracking-[2px] text-slate-500">Mon compte</p>
+        <p className="mb-3 text-xs font-bold uppercase tracking-[2px] text-stone-500">Mon compte</p>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
+          className="overflow-hidden rounded-2xl border border-stone-200 bg-white dark:border-ink-800 dark:bg-ink-900"
         >
           {([['Prénom', user.prenom], ['Nom', user.nom], ['Email', user.email]] as [string, string][]).map(([label, value]) => (
             <Row key={label} label={label}>
-              <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{value}</span>
+              <span className="text-sm font-medium text-ink-800 dark:text-stone-200">{value}</span>
             </Row>
           ))}
           <Row label="Rôle">
@@ -170,22 +170,22 @@ export default function Profile() {
           </Row>
           {user.numeroCarte && (
             <Row label="N° Carte" last>
-              <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{user.numeroCarte}</span>
+              <span className="text-sm font-medium text-ink-800 dark:text-stone-200">{user.numeroCarte}</span>
             </Row>
           )}
         </motion.div>
 
         {/* Documents : existant ou zone d'upload différé */}
-        <p className="mb-3 mt-7 text-xs font-bold uppercase tracking-[2px] text-slate-500">Documents</p>
+        <p className="mb-3 mt-7 text-xs font-bold uppercase tracking-[2px] text-stone-500">Documents</p>
         {user.documentAttestationUrl ? (
-          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+          <div className="flex items-center justify-between rounded-2xl border border-stone-200 bg-white p-5 dark:border-ink-800 dark:bg-ink-900">
             <div className="flex items-center gap-3">
               <FileText size={18} className="text-primary-400" />
-              <span className="text-sm font-medium text-slate-800 dark:text-slate-200">Attestation d'inscription</span>
+              <span className="text-sm font-medium text-ink-800 dark:text-stone-200">Attestation d'inscription</span>
             </div>
             <button
               onClick={() => openDocument(user.documentAttestationUrl!)}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-500"
+              className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cobalt-500"
             >
               Voir
             </button>
@@ -207,10 +207,10 @@ export default function Profile() {
               {uploading ? <CheckCircle2 size={26} className="animate-pulse" /> : <UploadCloud size={26} />}
             </div>
             <div>
-              <p className="font-bold text-slate-800 dark:text-slate-100">
+              <p className="font-bold text-ink-800 dark:text-stone-100">
                 {uploading ? 'Envoi en cours…' : 'Ajouter votre justificatif'}
               </p>
-              <p className="mt-1 text-sm text-slate-500">Glissez-déposez ou cliquez · PDF, JPG, PNG — 5 Mo max</p>
+              <p className="mt-1 text-sm text-stone-500">Glissez-déposez ou cliquez · PDF, JPG, PNG — 5 Mo max</p>
             </div>
             <input
               ref={fileRef}
@@ -225,15 +225,15 @@ export default function Profile() {
         {/* Notifications Web Push (étudiant) */}
         {user.role === 'ETUDIANT' && (
           <>
-            <p className="mb-3 mt-7 text-xs font-bold uppercase tracking-[2px] text-slate-500">Notifications</p>
-            <div className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <p className="mb-3 mt-7 text-xs font-bold uppercase tracking-[2px] text-stone-500">Notifications</p>
+            <div className="flex items-center justify-between gap-4 rounded-2xl border border-stone-200 bg-white p-5 dark:border-ink-800 dark:bg-ink-900">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary-400">
                   {pushState === 'enabled' ? <BellRing size={20} /> : <Bell size={20} />}
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">Alertes nouvelles offres</p>
-                  <p className="mt-0.5 text-xs text-slate-500">
+                  <p className="text-sm font-bold text-ink-800 dark:text-stone-100">Alertes nouvelles offres</p>
+                  <p className="mt-0.5 text-xs text-stone-500">
                     {pushState === 'enabled'
                       ? 'Activées · vous serez prévenu pour vos favoris'
                       : pushState === 'denied'
@@ -252,8 +252,8 @@ export default function Profile() {
                   pushState === 'enabled'
                     ? 'cursor-default bg-emerald-500/15 text-emerald-500'
                     : pushState === 'denied' || pushState === 'unsupported'
-                      ? 'cursor-not-allowed bg-slate-200 text-slate-400 dark:bg-slate-800'
-                      : 'bg-primary text-white hover:bg-violet-500 disabled:opacity-60',
+                      ? 'cursor-not-allowed bg-stone-200 text-stone-400 dark:bg-ink-800'
+                      : 'bg-primary text-white hover:bg-cobalt-500 disabled:opacity-60',
                 )}
               >
                 {pushState === 'enabled' ? '🔔 Activées' : pushState === 'loading' ? 'Activation…' : '🔔 Activer'}
@@ -263,14 +263,14 @@ export default function Profile() {
         )}
 
         {/* Zone RGPD / danger */}
-        <p className="mb-3 mt-7 text-xs font-bold uppercase tracking-[2px] text-slate-500">Confidentialité (RGPD)</p>
+        <p className="mb-3 mt-7 text-xs font-bold uppercase tracking-[2px] text-stone-500">Confidentialité (RGPD)</p>
         <div className="rounded-2xl border border-red-500/30 bg-red-500/[0.04] p-6">
           {pending ? (
             <div className="flex items-start gap-3">
               <AlertTriangle size={20} className="mt-0.5 flex-shrink-0 text-amber-500" />
               <div>
                 <p className="font-bold text-amber-600 dark:text-amber-400">Suppression demandée</p>
-                <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
                   Suppression effective sous 14 jours (RGPD).
                   {user.dateSuppressionDemandee && (
                     <> Demandée le {new Date(user.dateSuppressionDemandee).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}.</>
@@ -282,7 +282,7 @@ export default function Profile() {
             <>
               <div className="mb-4 flex items-start gap-3">
                 <ShieldAlert size={20} className="mt-0.5 flex-shrink-0 text-red-500" />
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-400">
                   Vous pouvez demander la suppression définitive de votre compte et de vos données personnelles.
                 </p>
               </div>
@@ -303,7 +303,7 @@ export default function Profile() {
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-500/15 text-red-500">
             <AlertTriangle size={30} />
           </div>
-          <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-400">
             Cette action est <span className="font-bold text-red-500">irréversible</span>. Votre compte et vos données seront
             définitivement supprimés. Suppression effective sous <span className="font-bold">14 jours (RGPD)</span>.
           </p>
@@ -311,7 +311,7 @@ export default function Profile() {
             <button
               onClick={() => setConfirmOpen(false)}
               disabled={requesting}
-              className="flex-1 rounded-xl border border-slate-200 bg-white py-3 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+              className="flex-1 rounded-xl border border-stone-200 bg-white py-3 text-sm font-semibold text-stone-600 transition-colors hover:bg-cream dark:border-ink-700 dark:bg-ink-800 dark:text-stone-300"
             >
               Annuler
             </button>
@@ -331,8 +331,8 @@ export default function Profile() {
 
 function Row({ label, children, last }: { label: string; children: React.ReactNode; last?: boolean }) {
   return (
-    <div className={cn('flex items-center justify-between px-5 py-4', !last && 'border-b border-slate-100 dark:border-slate-800')}>
-      <span className="text-sm font-semibold text-slate-500">{label}</span>
+    <div className={cn('flex items-center justify-between px-5 py-4', !last && 'border-b border-stone-100 dark:border-ink-800')}>
+      <span className="text-sm font-semibold text-stone-500">{label}</span>
       {children}
     </div>
   )

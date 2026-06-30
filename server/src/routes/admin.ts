@@ -169,6 +169,54 @@ router.get('/merchants', async (_req, res) => {
   })));
 });
 
+// PATCH /api/admin/merchants/:id — édition d'un commerce
+const merchantPatchSchema = z.object({
+  nom: z.string().min(1).optional(),
+  description: z.string().optional(),
+  adresse: z.string().min(1).optional(),
+  ville: z.string().min(1).optional(),
+  codePostal: z.string().min(1).optional(),
+  telephone: z.string().optional(),
+  siteWeb: z.string().optional(),
+  categorieId: z.coerce.number().int().optional(),
+  estValide: z.boolean().optional(),
+});
+
+router.patch('/merchants/:id', async (req, res) => {
+  const { id } = req.params;
+  const parsed = merchantPatchSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.flatten() });
+    return;
+  }
+
+  const commerce = await prisma.commerce.findUnique({ where: { id } });
+  if (!commerce) {
+    res.status(404).json({ error: 'Commerce introuvable' });
+    return;
+  }
+
+  if (parsed.data.categorieId !== undefined) {
+    const categorie = await prisma.categorie.findUnique({ where: { id: parsed.data.categorieId } });
+    if (!categorie) {
+      res.status(400).json({ error: 'Catégorie invalide' });
+      return;
+    }
+  }
+
+  const updated = await prisma.commerce.update({
+    where: { id },
+    data: parsed.data,
+    include: {
+      categorie: { select: { id: true, nom: true, icone: true } },
+      proprietaire: { select: { id: true, prenom: true, nom: true, email: true, isActif: true } },
+      _count: { select: { offres: true, passages: true } },
+    },
+  });
+  const { _count, ...c } = updated;
+  res.json({ ...c, nbOffres: _count.offres, nbPassages: _count.passages });
+});
+
 // GET /api/admin/categories — liste des catégories
 router.get('/categories', async (_req, res) => {
   const categories = await prisma.categorie.findMany({

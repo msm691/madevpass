@@ -83,32 +83,32 @@ export default function MerchantEdit() {
     setIsEditing(false)
   }
 
-  const center = 'flex h-screen items-center justify-center text-slate-500 dark:text-slate-400'
+  const center = 'flex h-screen items-center justify-center text-stone-500 dark:text-stone-400'
   if (loading) return <div className={center}>Chargement…</div>
   if (!commerce) return <div className={center}>Erreur de chargement</div>
 
-  const input = 'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-violet-600/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'
-  const label = 'mb-1.5 block text-sm font-semibold text-slate-600 dark:text-slate-300'
+  const input = 'w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm text-ink-900 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-cobalt-600/30 dark:border-ink-700 dark:bg-ink-800 dark:text-stone-100'
+  const label = 'mb-1.5 block text-sm font-semibold text-stone-600 dark:text-stone-300'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
+    <div className="relative min-h-screen overflow-hidden bg-cream dark:bg-ink-950">
       <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
 
       <header className="relative flex items-start justify-between px-6 pb-7 pt-12">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[2px] text-primary-400">Mon commerce</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">{commerce.nom}</h1>
+          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink-900 dark:text-stone-50">{commerce.nom}</h1>
         </div>
         <Navigation />
       </header>
 
       <main className="relative mx-auto w-full max-w-xl px-6 pb-16">
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-xs font-bold uppercase tracking-[2px] text-slate-500">Informations</p>
+          <p className="text-xs font-bold uppercase tracking-[2px] text-stone-500">Informations</p>
           {!isEditing && (
             <button
               onClick={() => setIsEditing(true)}
-              className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-violet-500"
+              className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-cobalt-500"
             >
               <Pencil size={14} />
               Modifier
@@ -127,7 +127,7 @@ export default function MerchantEdit() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
+            className="overflow-hidden rounded-2xl border border-stone-200 bg-white dark:border-ink-800 dark:bg-ink-900"
           >
             {([
               ['Nom du commerce', commerce.nom],
@@ -135,14 +135,14 @@ export default function MerchantEdit() {
               ['Téléphone', commerce.telephone],
               ['Site web', commerce.siteWeb],
             ] as [string, string][]).map(([l, v]) => (
-              <div key={l} className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-slate-800">
-                <span className="text-sm font-semibold text-slate-500">{l}</span>
-                <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{v || '—'}</span>
+              <div key={l} className="flex items-center justify-between border-b border-stone-100 px-5 py-4 dark:border-ink-800">
+                <span className="text-sm font-semibold text-stone-500">{l}</span>
+                <span className="text-sm font-medium text-ink-800 dark:text-stone-200">{v || '—'}</span>
               </div>
             ))}
             <div className="flex items-start justify-between px-5 py-4">
-              <span className="text-sm font-semibold text-slate-500">Description</span>
-              <span className="max-w-[60%] text-right text-sm font-medium leading-relaxed text-slate-800 dark:text-slate-200">
+              <span className="text-sm font-semibold text-stone-500">Description</span>
+              <span className="max-w-[60%] text-right text-sm font-medium leading-relaxed text-ink-800 dark:text-stone-200">
                 {commerce.description || '—'}
               </span>
             </div>
@@ -172,14 +172,14 @@ export default function MerchantEdit() {
               <button
                 type="button"
                 onClick={handleCancelEdit}
-                className="rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                className="rounded-xl border border-stone-200 bg-white px-6 py-3.5 text-sm font-semibold text-stone-600 transition-colors hover:bg-cream dark:border-ink-700 dark:bg-ink-800 dark:text-stone-300"
               >
                 Annuler
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 rounded-xl bg-primary py-3.5 font-bold text-white shadow-glow transition-colors hover:bg-violet-500 disabled:opacity-60"
+                className="flex-1 rounded-xl bg-primary py-3.5 font-bold text-white shadow-glow transition-colors hover:bg-cobalt-500 disabled:opacity-60"
               >
                 {saving ? 'Enregistrement…' : 'Sauvegarder'}
               </button>

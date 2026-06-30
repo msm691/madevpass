@@ -1,8 +1,9 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Check, FileUp, Clock } from 'lucide-react'
+import { Check, FileUp, Clock, GraduationCap, Tag, ShieldCheck, ArrowLeft } from 'lucide-react'
 import api from '../api/client'
+import AuthAside from '../components/auth/AuthAside'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -34,7 +35,7 @@ export default function Register() {
       setSuccess(true)
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error
-      setError(typeof msg === 'string' ? msg : "Erreur lors de l'inscription")
+      setError(typeof msg === 'string' ? msg : "L'inscription a échoué. Veuillez réessayer.")
     } finally {
       setLoading(false)
     }
@@ -45,113 +46,117 @@ export default function Register() {
     submit(false)
   }
 
-  const input = 'w-full rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm text-slate-100 outline-none transition-colors placeholder:text-slate-500 focus:border-primary focus:ring-2 focus:ring-primary/30'
-  const label = 'mb-1.5 block text-sm font-semibold text-slate-300'
+  const input = 'w-full rounded-lg border border-stone-300 bg-white px-4 py-3 text-sm text-ink-900 outline-none transition-colors placeholder:text-stone-400 focus:border-cobalt-500 dark:border-white/10 dark:bg-ink-900 dark:text-stone-100 dark:placeholder:text-stone-500'
+  const label = 'mb-1.5 block text-sm font-medium text-stone-700 dark:text-stone-300'
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-6 py-10">
-      {/* Background beams */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-primary/25 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 h-80 w-80 rounded-full bg-violet-600/15 blur-3xl" />
-      </div>
+    <div className="grid min-h-[100dvh] bg-cream dark:bg-ink-950 lg:grid-cols-2">
+      <AuthAside
+        title="Votre carte étudiante, en 2 minutes."
+        subtitle="Créez votre compte, validez votre statut et activez immédiatement vos avantages."
+        points={[
+          { icon: GraduationCap, text: 'Carte numérique + QR sécurisé' },
+          { icon: Tag, text: 'Offres réservées aux étudiants' },
+          { icon: ShieldCheck, text: 'Données chiffrées, conformes RGPD' },
+        ]}
+      />
 
-      <motion.div
-        initial={{ opacity: 0, y: 24, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="glow-ring relative w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/80 p-8 backdrop-blur-xl"
-      >
-        {success ? (
-          <div className="flex flex-col items-center text-center">
-            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
-              <Check size={32} />
+      <div className="flex items-center justify-center px-6 py-12 sm:px-10">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full max-w-md"
+        >
+          {success ? (
+            <div className="flex flex-col items-center text-center">
+              <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                <Check size={32} strokeWidth={2} />
+              </div>
+              <h2 className="font-display text-2xl font-bold text-ink-900 dark:text-white">Inscription reçue</h2>
+              <p className="mt-3 text-sm leading-relaxed text-stone-500 dark:text-stone-400">
+                Votre demande est en attente de validation par un administrateur.
+                Vous pourrez vous connecter dès que votre dossier sera validé.
+              </p>
+              <motion.button
+                onClick={() => navigate('/login')} whileTap={{ scale: 0.98 }}
+                className="mt-7 w-full rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600"
+              >
+                Retour à la connexion
+              </motion.button>
             </div>
-            <h2 className="text-2xl font-extrabold text-slate-50">Inscription reçue !</h2>
-            <p className="mt-3 text-sm leading-relaxed text-slate-400">
-              Votre demande est en attente de validation par un administrateur.
-              Vous pourrez vous connecter une fois votre dossier validé.
-            </p>
-            <button
-              onClick={() => navigate('/login')}
-              className="mt-7 w-full rounded-xl bg-primary py-3.5 font-bold text-white shadow-glow transition-colors hover:bg-violet-500"
-            >
-              Retour à la connexion
-            </button>
-          </div>
-        ) : (
-          <>
-            <h1 className="bg-gradient-to-r from-primary-400 to-violet-300 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent">
-              MADEV Pass
-            </h1>
-            <p className="mb-7 mt-1.5 text-sm text-slate-400">Créer un compte étudiant</p>
+          ) : (
+            <>
+              <Link to="/" className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition-colors hover:text-cobalt-600 dark:text-stone-400 dark:hover:text-cobalt-300">
+                <ArrowLeft size={16} strokeWidth={1.75} /> Accueil
+              </Link>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <div className="flex gap-3">
-                <div className="flex-1">
-                  <label className={label} htmlFor="prenom">Prénom</label>
-                  <input id="prenom" className={input} name="prenom" value={form.prenom} onChange={handleChange} required />
+              <h1 className="font-display text-3xl font-bold tracking-tight text-ink-900 dark:text-white">Créer mon compte</h1>
+              <p className="mb-7 mt-1.5 text-sm text-stone-500 dark:text-stone-400">Compte étudiant — Vienne.</p>
+
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+                <div className="flex gap-3">
+                  <div className="flex-1">
+                    <label className={label} htmlFor="prenom">Prénom</label>
+                    <input id="prenom" className={input} name="prenom" value={form.prenom} onChange={handleChange} required />
+                  </div>
+                  <div className="flex-1">
+                    <label className={label} htmlFor="nom">Nom</label>
+                    <input id="nom" className={input} name="nom" value={form.nom} onChange={handleChange} required />
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <label className={label} htmlFor="nom">Nom</label>
-                  <input id="nom" className={input} name="nom" value={form.nom} onChange={handleChange} required />
+
+                <div>
+                  <label className={label} htmlFor="email">Email</label>
+                  <input id="email" className={input} name="email" type="email" autoComplete="email" value={form.email} onChange={handleChange} required />
                 </div>
-              </div>
 
-              <div>
-                <label className={label} htmlFor="email">Email</label>
-                <input id="email" className={input} name="email" type="email" autoComplete="email" value={form.email} onChange={handleChange} required />
-              </div>
+                <div>
+                  <label className={label} htmlFor="password">Mot de passe</label>
+                  <input id="password" className={input} name="password" type="password" autoComplete="new-password" value={form.password} onChange={handleChange} required minLength={8} />
+                  <span className="mt-1 block text-xs text-stone-500">8 caractères minimum</span>
+                </div>
 
-              <div>
-                <label className={label} htmlFor="password">Mot de passe</label>
-                <input id="password" className={input} name="password" type="password" autoComplete="new-password" value={form.password} onChange={handleChange} required minLength={8} />
-                <span className="mt-1 block text-xs text-slate-500">8 caractères minimum</span>
-              </div>
+                <div>
+                  <label className={label}>Attestation de scolarité</label>
+                  <label
+                    htmlFor="attestation"
+                    className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-cobalt-500/40 bg-cobalt-500/[0.06] px-4 py-3 text-sm font-medium text-cobalt-700 transition-colors hover:border-cobalt-500/70 hover:bg-cobalt-500/10 dark:text-cobalt-300"
+                  >
+                    <FileUp size={16} strokeWidth={1.75} />
+                    <span className="truncate">{file ? file.name : 'Choisir un document'}</span>
+                  </label>
+                  <input id="attestation" type="file" accept=".pdf,.jpg,.jpeg,.png" className="hidden" onChange={handleFile} />
+                  <span className="mt-1 block text-xs text-stone-500">PDF, JPG ou PNG — 5 Mo max</span>
+                </div>
 
-              <div>
-                <label className={label}>Attestation de scolarité</label>
-                <label
-                  htmlFor="attestation"
-                  className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-primary/40 bg-primary/10 px-4 py-3 text-sm font-semibold text-primary-400 transition-colors hover:border-primary/70 hover:bg-primary/15"
+                {error && (
+                  <p role="alert" className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-sm font-medium text-red-600 dark:text-red-400">{error}</p>
+                )}
+
+                <motion.button
+                  type="submit" disabled={loading} whileTap={{ scale: 0.98 }}
+                  className="rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <FileUp size={16} />
-                  {file ? file.name : 'Choisir un document'}
-                </label>
-                <input id="attestation" type="file" accept=".pdf,.jpg,.jpeg,.png" className="hidden" onChange={handleFile} />
-                <span className="mt-1 block text-xs text-slate-500">PDF, JPG ou PNG — 5 Mo max</span>
-              </div>
+                  {loading ? 'Envoi en cours…' : 'Envoyer ma demande'}
+                </motion.button>
 
-              {error && (
-                <p className="rounded-xl bg-red-500/10 px-4 py-2.5 text-sm font-medium text-red-400">{error}</p>
-              )}
+                <button
+                  type="button" disabled={loading} onClick={() => submit(true)}
+                  className="flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-medium text-stone-500 transition-colors hover:bg-stone-500/10 hover:text-stone-700 disabled:opacity-60 dark:hover:text-stone-200"
+                >
+                  <Clock size={15} strokeWidth={1.75} />
+                  Envoyer le justificatif plus tard
+                </button>
+              </form>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="rounded-xl bg-primary py-3.5 font-bold text-white shadow-glow transition-colors hover:bg-violet-500 disabled:opacity-60"
-              >
-                {loading ? 'Envoi en cours…' : 'Envoyer ma demande'}
-              </button>
-
-              {/* Bouton fantôme : bypass du justificatif */}
-              <button
-                type="button"
-                disabled={loading}
-                onClick={() => submit(true)}
-                className="flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-slate-200 disabled:opacity-60"
-              >
-                <Clock size={15} />
-                Envoyer plus tard le justificatif
-              </button>
-            </form>
-
-            <p className="mt-6 text-center text-sm text-slate-400">
-              Déjà un compte ? <Link to="/login" className="font-semibold text-primary-400 hover:text-primary-300">Se connecter</Link>
-            </p>
-          </>
-        )}
-      </motion.div>
+              <p className="mt-6 text-center text-sm text-stone-500 dark:text-stone-400">
+                Déjà un compte ? <Link to="/login" className="font-semibold text-cobalt-600 hover:text-cobalt-700 dark:text-cobalt-400 dark:hover:text-cobalt-300">Se connecter</Link>
+              </p>
+            </>
+          )}
+        </motion.div>
+      </div>
     </div>
   )
 }

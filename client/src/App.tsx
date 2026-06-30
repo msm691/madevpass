@@ -17,6 +17,7 @@ import AdminQR from './pages/admin/AdminQR'
 import AdminCreateMerchant from './pages/admin/AdminCreateMerchant'
 import AdminMerchantList from './pages/admin/AdminMerchantList'
 import AdminCategories from './pages/admin/AdminCategories'
+import InstallButton from './components/ui/InstallButton'
 
 function decodeRole(token: string): string | null {
   try {
@@ -78,6 +79,7 @@ export default function App() {
 
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
+      <InstallButton />
     </BrowserRouter>
   )
 }

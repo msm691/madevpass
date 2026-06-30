@@ -151,30 +151,30 @@ export default function MerchantOffers() {
     }
   }
 
-  const center = 'flex h-screen items-center justify-center text-slate-500 dark:text-slate-400'
+  const center = 'flex h-screen items-center justify-center text-stone-500 dark:text-stone-400'
   if (loading) return <div className={center}>Chargement…</div>
 
-  const input = 'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-violet-600/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'
-  const label = 'mb-1.5 block text-xs font-semibold text-slate-600 dark:text-slate-300'
+  const input = 'w-full rounded-xl border border-stone-200 bg-white px-3.5 py-2.5 text-sm text-ink-900 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-cobalt-600/30 dark:border-ink-700 dark:bg-ink-800 dark:text-stone-100'
+  const label = 'mb-1.5 block text-xs font-semibold text-stone-600 dark:text-stone-300'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-50 pb-12 dark:bg-slate-950">
+    <div className="relative min-h-screen overflow-hidden bg-cream pb-12 dark:bg-ink-950">
       <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
 
       <header className="relative flex items-start justify-between px-6 pb-7 pt-12">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[2px] text-primary-400">Mon commerce</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">Mes Offres</h1>
+          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink-900 dark:text-stone-50">Mes Offres</h1>
         </div>
         <Navigation />
       </header>
 
       <main className="relative mx-auto w-full max-w-2xl px-6">
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-xs font-bold uppercase tracking-[2px] text-slate-500">Offres actives ({offres.length})</p>
+          <p className="text-xs font-bold uppercase tracking-[2px] text-stone-500">Offres actives ({offres.length})</p>
           <button
             onClick={() => showForm ? closeForm() : setShowForm(true)}
-            className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-violet-500"
+            className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-cobalt-500"
           >
             {showForm ? <><X size={14} /> Annuler</> : <><Plus size={14} /> Nouvelle offre</>}
           </button>
@@ -194,9 +194,9 @@ export default function MerchantOffers() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               onSubmit={handleSubmit}
-              className="mb-5 flex flex-col gap-3.5 overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+              className="mb-5 flex flex-col gap-3.5 overflow-hidden rounded-2xl border border-stone-200 bg-white p-5 dark:border-ink-800 dark:bg-ink-900"
             >
-              <p className="text-sm font-bold text-slate-700 dark:text-slate-200">
+              <p className="text-sm font-bold text-ink-700 dark:text-stone-200">
                 {editingId ? "Modifier l'offre" : 'Nouvelle offre'}
               </p>
               <div>
@@ -233,7 +233,7 @@ export default function MerchantOffers() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="mt-1 rounded-xl bg-primary py-3 font-bold text-white shadow-glow transition-colors hover:bg-violet-500 disabled:opacity-60"
+                className="mt-1 rounded-xl bg-primary py-3 font-bold text-white shadow-glow transition-colors hover:bg-cobalt-500 disabled:opacity-60"
               >
                 {submitting ? 'Enregistrement…' : editingId ? 'Enregistrer les modifications' : "Ajouter l'offre"}
               </button>
@@ -242,7 +242,7 @@ export default function MerchantOffers() {
         </AnimatePresence>
 
         {offres.length === 0 ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400 dark:border-slate-800 dark:bg-slate-900">
+          <div className="rounded-2xl border border-stone-200 bg-white p-8 text-center text-sm text-stone-400 dark:border-ink-800 dark:bg-ink-900">
             Aucune offre active. Créez votre première offre !
           </div>
         ) : (
@@ -253,10 +253,10 @@ export default function MerchantOffers() {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
-                className="rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900"
+                className="rounded-2xl border border-stone-200 bg-white p-5 transition-colors hover:border-primary/40 dark:border-ink-800 dark:bg-ink-900"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <span className="flex items-center gap-2 font-bold text-slate-900 dark:text-slate-100">
+                  <span className="flex items-center gap-2 font-bold text-ink-900 dark:text-stone-100">
                     <Tag size={15} className="text-primary-400" />
                     {offre.titre}
                   </span>
@@ -267,7 +267,7 @@ export default function MerchantOffers() {
                     <button
                       onClick={() => startEdit(offre)}
                       title="Modifier"
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-primary/50 hover:text-primary dark:border-slate-700 dark:hover:text-primary-400"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-stone-200 text-stone-500 transition-colors hover:border-primary/50 hover:text-primary dark:border-ink-700 dark:hover:text-primary-400"
                     >
                       <Pencil size={14} />
                     </button>
@@ -281,8 +281,8 @@ export default function MerchantOffers() {
                     </button>
                   </div>
                 </div>
-                {offre.description && <p className="mt-2 text-sm leading-relaxed text-slate-500">{offre.description}</p>}
-                <div className="mt-2 text-xs font-medium text-slate-400">
+                {offre.description && <p className="mt-2 text-sm leading-relaxed text-stone-500">{offre.description}</p>}
+                <div className="mt-2 text-xs font-medium text-stone-400">
                   <span>{formatDate(offre.dateDebut)}</span>
                   {offre.dateFin && <span> → {formatDate(offre.dateFin)}</span>}
                 </div>

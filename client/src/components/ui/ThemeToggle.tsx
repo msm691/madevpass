@@ -10,7 +10,7 @@ export default function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label="Changer de thème"
-      className="relative flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white/60 text-slate-700 transition-colors hover:border-primary/50 hover:text-primary dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:text-primary-400"
+      className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-stone-300 bg-white/60 text-stone-700 transition-colors hover:border-cobalt-500/50 hover:text-cobalt-600 dark:border-white/10 dark:bg-ink-900/60 dark:text-stone-200 dark:hover:text-cobalt-300"
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
@@ -21,7 +21,7 @@ export default function ThemeToggle() {
           transition={{ duration: 0.2 }}
           className="absolute"
         >
-          {dark ? <Moon size={18} /> : <Sun size={18} />}
+          {dark ? <Moon size={17} strokeWidth={1.75} /> : <Sun size={17} strokeWidth={1.75} />}
         </motion.span>
       </AnimatePresence>
     </button>

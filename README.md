@@ -4,6 +4,8 @@
 
 MADEV Pass digitalise la carte étudiante sous forme d'un **QR code sécurisé à rotation**, met en relation les **étudiants** avec les **commerces locaux** (offres & réductions), et fournit aux **administrateurs** les outils de modération et de pilotage du réseau.
 
+Application **PWA installable** (mobile & desktop) avec **notifications push** et **tableaux de bord analytiques**.
+
 ---
 
 ## ✨ Aperçu
@@ -13,9 +15,9 @@ L'application s'articule autour de **trois espaces** et d'une **landing page vit
 | Espace | Rôle | Fonctionnalités clés |
 |--------|------|----------------------|
 | 🌐 **Landing** | Public | Vitrine premium (hero 3D, statistiques, showcase) avant connexion |
-| 🎓 **Étudiant** | `ETUDIANT` | Carte numérique + QR plein écran avec timer, annuaire des partenaires, favoris, profil/RGPD |
-| 🏪 **Commerçant** | `COMMERCANT` | Tableau de bord, scan QR des étudiants, gestion des offres, édition du commerce |
-| 🛡️ **Admin** | `ADMIN` | Validation des inscriptions, gestion des comptes & commerçants, catégories, statistiques |
+| 🎓 **Étudiant** | `ETUDIANT` | Carte numérique + QR plein écran avec timer, annuaire des partenaires, favoris, profil/RGPD, notifications push |
+| 🏪 **Commerçant** | `COMMERCANT` | Tableau de bord analytique (graphiques `recharts`), UI caisse de scan QR, gestion des offres, édition du commerce |
+| 🛡️ **Admin** | `ADMIN` | Validation des inscriptions, gestion des comptes & commerçants, catégories, dashboard analytique (`AdminShell`) |
 
 ---
 
@@ -44,7 +46,11 @@ Interface pensée comme un **produit SaaS / Fintech premium**, avec un **Dark Mo
 - **react-fast-marquee** (bandeau partenaires)
 - **qrcode.react** (génération QR)
 - **html5-qrcode** (scan caméra)
+- **recharts** (graphiques des tableaux de bord)
+- **canvas-confetti** (feedback de validation)
+- **vite-plugin-pwa** (PWA, service worker, manifest, install prompt)
 - **Axios** (client API + intercepteurs auth)
+- Polices : **Geist**, **Geist Mono**, **Outfit** (`@fontsource-variable`)
 
 ### Backend (`/server`)
 - **Node.js** + **Express** + **TypeScript**
@@ -53,6 +59,7 @@ Interface pensée comme un **produit SaaS / Fintech premium**, avec un **Dark Mo
 - **bcryptjs** (hash des mots de passe)
 - **Zod** (validation des entrées)
 - **Multer** (upload des justificatifs)
+- **web-push** (notifications push VAPID)
 
 ---
 
@@ -63,6 +70,7 @@ Interface pensée comme un **produit SaaS / Fintech premium**, avec un **Dark Mo
 - **QR code à rotation** (token éphémère, anti-rejeu via signature et expiration)
 - Mots de passe hachés (bcrypt)
 - Validation systématique des payloads (Zod)
+- **Notifications push** sécurisées (VAPID via `web-push`, service worker `push-sw.js`)
 - **Conformité RGPD** : demande de suppression de compte (statut `pending_deletion` + délai légal de 14 jours), gestion des documents justificatifs
 
 ---
@@ -72,15 +80,16 @@ Interface pensée comme un **produit SaaS / Fintech premium**, avec un **Dark Mo
 ```
 madevpass/
 ├── client/                 # Application React (Vite + TS + Tailwind)
+│   ├── public/             # favicon, manifest PWA, push-sw.js
 │   └── src/
 │       ├── pages/          # Landing, Login, Register, Profile + espaces etudiant/commercant/admin
-│       ├── components/     # Navigation, BottomNav, StudentCard, MerchantCard, ui/, landing/
+│       ├── components/     # Navigation, BottomNav, StudentCard, MerchantCard, admin/, auth/, ui/, landing/
 │       ├── theme/          # ThemeProvider (dark/light)
 │       ├── hooks/          # useFavoris
 │       └── api/            # client Axios
 └── server/                 # API Express (TS + Prisma)
     └── src/
-        ├── routes/         # auth, admin, commerces, categories, passages, documents
+        ├── routes/         # auth, admin, commerces, categories, passages, documents, notifications
         ├── middleware/     # authMiddleware, requireRole
         └── lib/            # prisma client
 ```
@@ -93,8 +102,10 @@ madevpass/
 - **Authentification** complète (inscription avec justificatif optionnel / différé, connexion, gestion d'erreurs sans rechargement)
 - **Landing page** premium responsive (hero 3D, compteurs animés données réelles Vienne — 470 commerçants, 1920 étudiants, 100% RGPD)
 - **Espace Étudiant** : carte numérique, QR plein écran avec timer de rafraîchissement, annuaire filtrable (recherche, catégories, proximité), favoris
-- **Espace Commerçant** : dashboard (statistiques de passages), scanner QR (cadre + ligne de balayage animée), création / édition / suppression d'offres, édition du commerce
-- **Espace Admin** : validation/refus des inscriptions, liste & édition des comptes, liste des commerçants, création directe de commerçants, gestion des catégories, vue QR admin
+- **Espace Commerçant** : dashboard analytique (graphiques `recharts`), UI caisse de scan QR (cadre + ligne de balayage animée + confetti de validation), création / édition / suppression d'offres, édition du commerce
+- **Espace Admin** : layout dédié (`AdminShell`), dashboard analytique, validation/refus des inscriptions, liste & édition des comptes, liste des commerçants, création directe de commerçants, gestion des catégories, vue QR admin
+- **PWA** : installable (manifest + service worker via `vite-plugin-pwa`), bouton d'installation (`InstallButton`)
+- **Notifications push** : abonnement VAPID, `push-sw.js`, route serveur `/api/notifications`
 - **Dark / Light mode** natif avec persistance
 - **Conformité RGPD** (demande de suppression, upload différé de justificatif)
 

@@ -53,35 +53,35 @@ export default function Annuaire() {
   const chip = 'flex-shrink-0 whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-50 pb-28 dark:bg-slate-950">
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
+    <div className="grain relative min-h-screen overflow-hidden bg-cream pb-28 dark:bg-ink-950">
+      <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-cobalt-500/15 blur-3xl" />
 
       <header className="relative px-6 pb-5 pt-12">
-        <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">Annuaire</h1>
-        <p className="mt-1 text-sm text-primary-400">Partenaires étudiants à Vienne</p>
+        <h1 className="font-display text-2xl font-bold tracking-tight text-ink-900 dark:text-white">Annuaire</h1>
+        <p className="mt-1 text-sm text-cobalt-600 dark:text-cobalt-400">Partenaires étudiants à Vienne</p>
 
         <div className="relative mt-5 flex items-center">
-          <Search size={17} className="pointer-events-none absolute left-4 text-slate-400" />
+          <Search size={17} strokeWidth={1.75} className="pointer-events-none absolute left-4 text-stone-400" />
           <input
-            className="w-full rounded-2xl border border-slate-200 bg-white px-11 py-3 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-violet-600/30 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+            className="w-full rounded-xl border border-stone-300 bg-white px-11 py-3 text-sm text-ink-900 outline-none transition-colors placeholder:text-stone-400 focus:border-cobalt-500 dark:border-white/10 dark:bg-ink-900 dark:text-stone-100"
             placeholder="Rechercher un commerce…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           {search && (
-            <button onClick={() => setSearch('')} aria-label="Effacer" className="absolute right-4 text-slate-400 hover:text-slate-600">
-              <X size={16} />
+            <button onClick={() => setSearch('')} aria-label="Effacer la recherche" className="absolute right-4 text-stone-400 hover:text-stone-600">
+              <X size={16} strokeWidth={1.75} />
             </button>
           )}
         </div>
       </header>
 
-      <div className="relative flex items-center gap-2.5 border-b border-slate-200 bg-white/50 px-6 py-3.5 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/40">
+      <div className="relative flex items-center gap-2.5 border-b border-stone-200 bg-white/50 px-6 py-3.5 backdrop-blur-sm dark:border-white/10 dark:bg-ink-900/40">
         <div className="flex flex-1 gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <button
             className={cn(chip, selectedCat === null
-              ? 'border-primary bg-primary text-white'
-              : 'border-slate-200 bg-transparent text-slate-500 dark:border-slate-700')}
+              ? 'border-cobalt-500 bg-cobalt-500 text-white'
+              : 'border-stone-200 bg-transparent text-stone-500 dark:border-white/10')}
             onClick={() => setSelectedCat(null)}
           >
             Tous
@@ -90,8 +90,8 @@ export default function Annuaire() {
             <button
               key={cat.id}
               className={cn(chip, selectedCat === cat.id
-                ? 'border-primary bg-primary text-white'
-                : 'border-slate-200 bg-transparent text-slate-500 dark:border-slate-700')}
+                ? 'border-cobalt-500 bg-cobalt-500 text-white'
+                : 'border-stone-200 bg-transparent text-stone-500 dark:border-white/10')}
               onClick={() => setSelectedCat(selectedCat === cat.id ? null : cat.id)}
             >
               {cat.icone ?? ''} {cat.nom}
@@ -101,18 +101,18 @@ export default function Annuaire() {
 
         <button
           className={cn(chip, 'flex items-center gap-1.5', sortProximite
-            ? 'border-primary bg-primary/15 text-primary dark:text-primary-400'
-            : 'border-slate-200 bg-transparent text-slate-500 dark:border-slate-700')}
+            ? 'border-cobalt-500 bg-cobalt-500/12 text-cobalt-700 dark:text-cobalt-300'
+            : 'border-stone-200 bg-transparent text-stone-500 dark:border-white/10')}
           onClick={() => setSortProximite((v) => !v)}
           title="Trier par proximité"
         >
-          <MapPin size={13} />
+          <MapPin size={13} strokeWidth={1.75} />
           Proximité
         </button>
       </div>
 
       <div className="px-6 pb-1 pt-4">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+        <span className="tnum text-xs font-semibold uppercase tracking-wider text-stone-400">
           {loading ? 'Chargement…' : error ? error : `${filtered.length} commerce${filtered.length > 1 ? 's' : ''}`}
         </span>
       </div>
@@ -120,10 +120,16 @@ export default function Annuaire() {
       <div className="flex flex-col gap-3 px-6 pb-4 pt-2">
         {loading &&
           Array.from({ length: 6 }).map((_, i) => <MerchantCardSkeleton key={i} />)}
-        {!loading && filtered.length === 0 && (
-          <div className="flex flex-col items-center gap-2 py-16 text-slate-400">
-            <Search size={32} className="text-primary-400" />
-            <p className="text-sm">Aucun résultat</p>
+        {!loading && error && (
+          <div className="flex flex-col items-center gap-2 py-16 text-center text-stone-400">
+            <p className="font-display text-base font-semibold text-ink-900 dark:text-white">Chargement impossible</p>
+            <p className="text-sm">{error}</p>
+          </div>
+        )}
+        {!loading && !error && filtered.length === 0 && (
+          <div className="flex flex-col items-center gap-2 py-16 text-stone-400">
+            <Search size={32} strokeWidth={1.5} className="text-cobalt-500" />
+            <p className="text-sm">Aucun commerce ne correspond à votre recherche.</p>
           </div>
         )}
         {filtered.map((commerce) => (

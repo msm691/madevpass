@@ -10,8 +10,8 @@ export default defineConfig({
       manifest: {
         name: 'MADEV Pass',
         short_name: 'MADEV',
-        theme_color: '#020617',
-        background_color: '#020617',
+        theme_color: '#0D0F14',
+        background_color: '#0D0F14',
         display: 'standalone',
       },
       workbox: {

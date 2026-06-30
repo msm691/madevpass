@@ -78,9 +78,9 @@ export default function Navigation() {
           onClick={() => setOpen(o => !o)}
           aria-label="Menu"
           aria-expanded={open}
-          className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-white backdrop-blur-md transition-colors hover:border-primary/60 hover:bg-primary/20"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-white backdrop-blur-md transition-colors hover:border-cobalt-400/60 hover:bg-cobalt-500/20"
         >
-          <Menu size={18} />
+          <Menu size={18} strokeWidth={1.75} />
         </button>
 
         <AnimatePresence>
@@ -90,7 +90,7 @@ export default function Navigation() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.96 }}
               transition={{ duration: 0.16 }}
-              className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white/90 p-2 shadow-glow backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/90"
+              className="glass absolute right-0 z-overlay mt-2 w-56 overflow-hidden rounded-2xl p-2 shadow-card-hover"
             >
               {visibleItems.map(item => {
                 const Icon = item.icon
@@ -98,19 +98,19 @@ export default function Navigation() {
                   <button
                     key={item.name}
                     onClick={() => go(item)}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-primary/10 hover:text-primary dark:text-slate-200 dark:hover:text-primary-400"
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-stone-700 transition-colors hover:bg-cobalt-500/10 hover:text-cobalt-600 dark:text-stone-200 dark:hover:text-cobalt-300"
                   >
-                    <Icon size={17} />
+                    <Icon size={17} strokeWidth={1.75} />
                     {item.name}
                   </button>
                 )
               })}
-              <div className="my-1 h-px bg-slate-200 dark:bg-slate-800" />
+              <div className="my-1 h-px bg-stone-200 dark:bg-white/10" />
               <button
                 onClick={logout}
                 className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-red-500 transition-colors hover:bg-red-500/10"
               >
-                <LogOut size={17} />
+                <LogOut size={17} strokeWidth={1.75} />
                 Déconnexion
               </button>
             </motion.div>

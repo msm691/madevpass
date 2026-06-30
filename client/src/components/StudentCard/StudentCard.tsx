@@ -54,7 +54,7 @@ export default function StudentCard({ user, reveal = false }: Props) {
             : { duration: 0.45, ease: 'easeOut' }
         }
         whileHover={{ scale: 0.985 }}
-        className="group relative flex min-h-[220px] w-full max-w-sm flex-col justify-between overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-violet-950 p-6 text-left text-white shadow-glow transition-shadow duration-300 hover:shadow-[0_0_60px_-8px_rgba(124,58,237,0.8)]"
+        className="group relative flex min-h-[220px] w-full max-w-sm flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-ink-900 via-ink-900 to-cobalt-950 p-6 text-left text-white shadow-cobalt transition-shadow duration-300 hover:shadow-[0_0_60px_-8px_rgba(35,71,230,0.75)]"
       >
         {reveal && (
           <motion.span
@@ -64,29 +64,29 @@ export default function StudentCard({ user, reveal = false }: Props) {
             transition={{ duration: 0.9, ease: 'easeInOut', delay: 0.9 }}
           />
         )}
-        <div className="pointer-events-none absolute -right-10 -top-16 h-52 w-52 rounded-full bg-primary/20 blur-2xl" />
-        <div className="pointer-events-none absolute -bottom-20 -left-8 h-48 w-48 rounded-full bg-violet-500/15 blur-2xl" />
+        <div className="pointer-events-none absolute -right-10 -top-16 h-52 w-52 rounded-full bg-cobalt-500/25 blur-2xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-8 h-48 w-48 rounded-full bg-cobalt-400/15 blur-2xl" />
 
         <div className="relative z-10 flex items-start justify-between">
           <div className="flex flex-col">
-            <span className="text-lg font-extrabold tracking-wide text-slate-100">MADEV Pass</span>
-            <span className="mt-0.5 text-[10px] font-medium uppercase tracking-[2px] text-primary-400">Carte Étudiante · Vienne</span>
+            <span className="font-display text-lg font-bold tracking-wide text-white">MADEV Pass</span>
+            <span className="mt-0.5 font-mono text-[10px] font-medium uppercase tracking-[2px] text-cobalt-300">Carte étudiante · Vienne</span>
           </div>
-          <span className="flex items-center gap-1 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-semibold text-slate-200 opacity-0 transition-opacity group-hover:opacity-100">
-            <Maximize2 size={11} /> Agrandir
+          <span className="flex items-center gap-1 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-semibold text-stone-200 opacity-0 transition-opacity group-hover:opacity-100">
+            <Maximize2 size={11} strokeWidth={1.75} /> Agrandir
           </span>
         </div>
 
         <div className="relative z-10 mt-5 flex items-end justify-between">
           <div className="flex flex-1 flex-col gap-2.5">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-primary to-violet-400 text-lg font-bold text-white ring-2 ring-white/15">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-cobalt-500 to-cobalt-300 text-lg font-bold text-white ring-2 ring-white/15">
               {initiales}
             </div>
             <div className="flex flex-col">
-              <span className="text-base font-bold leading-tight text-slate-50">
+              <span className="text-base font-bold leading-tight text-white">
                 {user.prenom} {user.nom.toUpperCase()}
               </span>
-              <span className="mt-1 font-mono text-[11px] tracking-[1.5px] text-primary-400">{user.numeroCarte}</span>
+              <span className="tnum mt-1 font-mono text-[11px] tracking-[1.5px] text-cobalt-300">{user.numeroCarte}</span>
             </div>
             <span className="flex w-fit items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-400">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
@@ -108,43 +108,43 @@ export default function StudentCard({ user, reveal = false }: Props) {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl bg-white p-5 shadow-glow"
+            className="rounded-2xl bg-white p-5 shadow-cobalt-sm"
           >
             <QRCodeSVG value={qrValue} size={250} level="M" />
           </motion.div>
 
-          <p className="text-center font-bold text-slate-900 dark:text-slate-100">
+          <p className="text-center font-bold text-ink-900 dark:text-white">
             {user.prenom} {user.nom.toUpperCase()}
           </p>
-          <p className="-mt-3 font-mono text-xs tracking-[1.5px] text-primary dark:text-primary-400">{user.numeroCarte}</p>
+          <p className="tnum -mt-3 font-mono text-xs tracking-[1.5px] text-cobalt-600 dark:text-cobalt-400">{user.numeroCarte}</p>
 
-          <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-800/50">
+          <div className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 dark:border-white/10 dark:bg-ink-800/50">
             <div className="relative h-14 w-14">
               <svg className="h-14 w-14 -rotate-90" viewBox="0 0 64 64">
-                <circle cx="32" cy="32" r={R} fill="none" strokeWidth="5" className="stroke-slate-200 dark:stroke-slate-700" />
+                <circle cx="32" cy="32" r={R} fill="none" strokeWidth="5" className="stroke-stone-200 dark:stroke-ink-700" />
                 <motion.circle
                   cx="32" cy="32" r={R} fill="none" strokeWidth="5" strokeLinecap="round"
-                  className="stroke-primary"
+                  className="stroke-cobalt-500"
                   strokeDasharray={C}
                   animate={{ strokeDashoffset: C * (1 - progress) }}
                   transition={{ duration: 0.5, ease: 'linear' }}
                 />
               </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-sm font-extrabold text-slate-900 dark:text-slate-100">
+              <span className="tnum absolute inset-0 flex items-center justify-center text-sm font-bold text-ink-900 dark:text-white">
                 {secondsLeft}
               </span>
             </div>
             <div className="text-left">
-              <p className="flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-slate-100">
-                <RefreshCw size={14} className="text-primary dark:text-primary-400" /> Rafraîchissement
+              <p className="flex items-center gap-1.5 text-sm font-bold text-ink-900 dark:text-white">
+                <RefreshCw size={14} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" /> Rafraîchissement
               </p>
-              <p className="text-xs text-slate-500">
-                Nouveau QR dans <span className="font-semibold text-slate-700 dark:text-slate-300">{secondsLeft}s</span>
+              <p className="text-xs text-stone-500">
+                Nouveau QR dans <span className="tnum font-semibold text-stone-700 dark:text-stone-300">{secondsLeft}s</span>
               </p>
             </div>
           </div>
 
-          <p className="text-center text-xs text-slate-400">Présentez ce QR code chez nos partenaires</p>
+          <p className="text-center text-xs text-stone-400">Présentez ce QR code chez nos partenaires</p>
         </div>
       </Modal>
     </>

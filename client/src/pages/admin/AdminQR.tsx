@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { QRCodeSVG } from 'qrcode.react'
 import { ShieldCheck } from 'lucide-react'
-import Navigation from '../../components/Navigation/Navigation'
+import AdminShell from '../../components/admin/AdminShell'
 import api from '../../api/client'
 import type { User } from '../../types/user'
 
@@ -24,53 +24,39 @@ export default function AdminQR() {
   })
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
-      {/* Background beams */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-violet-500/10 blur-3xl" />
-      </div>
-
-      <header className="relative flex items-start justify-between px-6 pb-7 pt-12">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[2px] text-primary-400">Espace administrateur</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">QR Code Admin</h1>
-        </div>
-        <Navigation />
-      </header>
-
-      <main className="relative flex flex-col items-center px-6 pb-16 pt-6">
+    <AdminShell title="QR Code admin" back={{ to: '/admin/dashboard', label: 'Tableau de bord' }} max="max-w-sm">
+      <div className="flex flex-col items-center pt-2">
         {loading ? (
-          <p className="py-20 text-slate-500">Chargement…</p>
+          <div className="skeleton h-[420px] w-full max-w-sm rounded-3xl" />
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="glow-ring w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 dark:border-slate-800 dark:bg-slate-900"
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-sm rounded-3xl border border-stone-200 bg-white p-8 shadow-card-hover dark:border-white/10 dark:bg-ink-900"
           >
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/15 text-primary-400">
-                <ShieldCheck size={22} />
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cobalt-500/15 text-cobalt-600 dark:text-cobalt-400">
+                <ShieldCheck size={22} strokeWidth={1.75} />
               </div>
-              <div>
-                <p className="font-bold text-slate-900 dark:text-slate-100">
+              <div className="min-w-0">
+                <p className="truncate font-display font-semibold text-ink-900 dark:text-white">
                   {user ? `${user.prenom} ${user.nom}` : 'Administrateur'}
                 </p>
-                <p className="text-xs text-slate-500">{user?.email}</p>
+                <p className="truncate text-xs text-stone-500">{user?.email}</p>
               </div>
             </div>
 
-            <div className="flex justify-center rounded-2xl bg-white p-5 shadow-glow-sm">
+            <div className="flex justify-center rounded-2xl bg-white p-5 shadow-cobalt-sm ring-1 ring-stone-100">
               <QRCodeSVG value={qrValue} size={208} level="M" />
             </div>
 
-            <p className="mt-6 text-center text-sm text-slate-500">
+            <p className="mt-6 text-center text-sm text-stone-500">
               Code administrateur sécurisé · rotation automatique
             </p>
           </motion.div>
         )}
-      </main>
-    </div>
+      </div>
+    </AdminShell>
   )
 }

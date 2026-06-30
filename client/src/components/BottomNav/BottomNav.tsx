@@ -14,7 +14,7 @@ export default function BottomNav() {
   const navigate = useNavigate()
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 mx-auto flex max-w-md items-center justify-around border-t border-slate-200/70 bg-white/70 px-2 pb-[env(safe-area-inset-bottom)] pt-2 backdrop-blur-xl dark:border-slate-800/70 dark:bg-slate-900/60">
+    <nav className="fixed inset-x-0 bottom-0 z-nav mx-auto flex max-w-md items-center justify-around border-t border-stone-200/70 bg-cream/80 px-2 pb-[env(safe-area-inset-bottom)] pt-2 backdrop-blur-xl dark:border-white/10 dark:bg-ink-900/70">
       {TABS.map((tab) => {
         const active = location.pathname === tab.path
         const Icon = tab.icon
@@ -28,16 +28,17 @@ export default function BottomNav() {
             {active && (
               <motion.span
                 layoutId="bottomnav-active"
-                className="absolute inset-0 rounded-xl bg-primary/10"
+                className="absolute inset-0 rounded-xl bg-cobalt-500/10"
                 transition={{ type: 'spring', damping: 24, stiffness: 320 }}
               />
             )}
             <Icon
               size={22}
-              className={cn('relative z-10 transition-colors', active ? 'text-primary' : 'text-slate-400')}
+              strokeWidth={1.75}
+              className={cn('relative z-10 transition-colors', active ? 'text-cobalt-600 dark:text-cobalt-400' : 'text-stone-400')}
               fill={tab.label === 'Favoris' && active ? 'currentColor' : 'none'}
             />
-            <span className={cn('relative z-10 text-[11px] font-semibold transition-colors', active ? 'text-primary' : 'text-slate-400')}>
+            <span className={cn('relative z-10 text-[11px] font-semibold transition-colors', active ? 'text-cobalt-600 dark:text-cobalt-400' : 'text-stone-400')}>
               {tab.label}
             </span>
           </button>
