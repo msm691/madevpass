@@ -7,13 +7,15 @@ import Modal from '../ui/Modal'
 
 interface Props {
   user: StudentUser
+  /** Animation de déverrouillage 3D spectaculaire (première connexion) */
+  reveal?: boolean
 }
 
 function buildQr(user: StudentUser, minuteTs: number) {
   return JSON.stringify({ id: user.id, carte: user.numeroCarte, ts: minuteTs })
 }
 
-export default function StudentCard({ user }: Props) {
+export default function StudentCard({ user, reveal = false }: Props) {
   const [open, setOpen] = useState(false)
   const [now, setNow] = useState(() => Date.now())
 
@@ -39,12 +41,29 @@ export default function StudentCard({ user }: Props) {
       <motion.button
         type="button"
         onClick={() => setOpen(true)}
-        initial={{ opacity: 0, y: 24, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.45, ease: 'easeOut' }}
+        style={{ transformPerspective: 1200 }}
+        initial={
+          reveal
+            ? { opacity: 0, rotateY: 180, rotateX: -25, scale: 0.82, y: 40 }
+            : { opacity: 0, y: 24, scale: 0.97 }
+        }
+        animate={{ opacity: 1, rotateY: 0, rotateX: 0, scale: 1, y: 0 }}
+        transition={
+          reveal
+            ? { duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }
+            : { duration: 0.45, ease: 'easeOut' }
+        }
         whileHover={{ scale: 0.985 }}
         className="group relative flex min-h-[220px] w-full max-w-sm flex-col justify-between overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-violet-950 p-6 text-left text-white shadow-glow transition-shadow duration-300 hover:shadow-[0_0_60px_-8px_rgba(124,58,237,0.8)]"
       >
+        {reveal && (
+          <motion.span
+            className="pointer-events-none absolute inset-0 z-20 skew-x-12 bg-gradient-to-r from-transparent via-white/60 to-transparent"
+            initial={{ x: '-150%' }}
+            animate={{ x: '150%' }}
+            transition={{ duration: 0.9, ease: 'easeInOut', delay: 0.9 }}
+          />
+        )}
         <div className="pointer-events-none absolute -right-10 -top-16 h-52 w-52 rounded-full bg-primary/20 blur-2xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-8 h-48 w-48 rounded-full bg-violet-500/15 blur-2xl" />
 

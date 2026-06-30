@@ -10,6 +10,7 @@ import CommercantDashboard from './pages/commercant/Dashboard'
 import Scanner from './pages/commercant/Scanner'
 import MerchantEdit from './pages/commercant/MerchantEdit'
 import MerchantOffers from './pages/commercant/MerchantOffers'
+import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminValidation from './pages/admin/Validation'
 import AdminUserList from './pages/admin/AdminUserList'
 import AdminQR from './pages/admin/AdminQR'
@@ -38,7 +39,7 @@ function DashboardRedirect() {
   if (!token) return <Navigate to="/login" replace />
   const role = decodeRole(token)
   if (role === 'COMMERCANT') return <Navigate to="/commercant" replace />
-  if (role === 'ADMIN') return <Navigate to="/admin/validation" replace />
+  if (role === 'ADMIN') return <Navigate to="/admin/dashboard" replace />
   return <Navigate to="/carte" replace />
 }
 
@@ -66,13 +67,14 @@ export default function App() {
         <Route path="/merchant/edit" element={<ProtectedRoleRoute roles={['COMMERCANT']}><MerchantEdit /></ProtectedRoleRoute>} />
 
         {/* Admin */}
+        <Route path="/admin/dashboard" element={<ProtectedRoleRoute roles={['ADMIN']}><AdminDashboard /></ProtectedRoleRoute>} />
         <Route path="/admin/validation" element={<ProtectedRoleRoute roles={['ADMIN']}><AdminValidation /></ProtectedRoleRoute>} />
         <Route path="/admin/users" element={<ProtectedRoleRoute roles={['ADMIN']}><AdminUserList /></ProtectedRoleRoute>} />
         <Route path="/admin/qr" element={<ProtectedRoleRoute roles={['ADMIN']}><AdminQR /></ProtectedRoleRoute>} />
         <Route path="/admin/merchant/new" element={<ProtectedRoleRoute roles={['ADMIN']}><AdminCreateMerchant /></ProtectedRoleRoute>} />
         <Route path="/admin/commercants" element={<ProtectedRoleRoute roles={['ADMIN']}><AdminMerchantList /></ProtectedRoleRoute>} />
         <Route path="/admin/categories" element={<ProtectedRoleRoute roles={['ADMIN']}><AdminCategories /></ProtectedRoleRoute>} />
-        <Route path="/admin" element={<ProtectedRoleRoute roles={['ADMIN']}><Navigate to="/admin/validation" replace /></ProtectedRoleRoute>} />
+        <Route path="/admin" element={<ProtectedRoleRoute roles={['ADMIN']}><Navigate to="/admin/dashboard" replace /></ProtectedRoleRoute>} />
 
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>

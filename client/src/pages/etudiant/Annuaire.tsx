@@ -3,6 +3,7 @@ import { Search, MapPin, X } from 'lucide-react'
 import type { Categorie, CommerceWithDetails } from '../../types/commerce'
 import MerchantCard from '../../components/MerchantCard/MerchantCard'
 import BottomNav from '../../components/BottomNav/BottomNav'
+import { MerchantCardSkeleton } from '../../components/ui/Skeleton'
 import { useFavoris } from '../../hooks/useFavoris'
 import api from '../../api/client'
 import { cn } from '../../lib/utils'
@@ -117,6 +118,8 @@ export default function Annuaire() {
       </div>
 
       <div className="flex flex-col gap-3 px-6 pb-4 pt-2">
+        {loading &&
+          Array.from({ length: 6 }).map((_, i) => <MerchantCardSkeleton key={i} />)}
         {!loading && filtered.length === 0 && (
           <div className="flex flex-col items-center gap-2 py-16 text-slate-400">
             <Search size={32} className="text-primary-400" />

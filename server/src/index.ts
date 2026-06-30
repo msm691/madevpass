@@ -10,6 +10,7 @@ import commercesRoutes from './routes/commerces';
 import categoriesRoutes from './routes/categories';
 import passagesRoutes from './routes/passages';
 import documentsRoutes from './routes/documents';
+import notificationsRoutes from './routes/notifications';
 import { authMiddleware, requireRole } from './middleware/authMiddleware';
 
 const app = express();
@@ -24,6 +25,7 @@ app.get('/health', (_req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/documents', documentsRoutes);
+app.use('/api/notifications', authMiddleware, notificationsRoutes);
 
 const adminGuard = [authMiddleware, requireRole('ADMIN')] as const;
 app.use('/api/admin', ...adminGuard, adminRoutes);

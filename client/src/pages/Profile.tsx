@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type DragEvent } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, ShieldAlert, AlertTriangle, UploadCloud, CheckCircle2 } from 'lucide-react'
+import { FileText, ShieldAlert, AlertTriangle, UploadCloud, CheckCircle2, Bell, BellRing } from 'lucide-react'
 import Navigation from '../components/Navigation/Navigation'
 import Modal from '../components/ui/Modal'
 import api from '../api/client'
@@ -16,6 +16,16 @@ const ROLE_LABEL: Record<string, string> = {
   ETUDIANT: 'Étudiant',
   COMMERCANT: 'Commerçant',
   ADMIN: 'Administrateur',
+}
+
+function urlBase64ToUint8Array(base64: string): Uint8Array<ArrayBuffer> {
+  const padding = '='.repeat((4 - (base64.length % 4)) % 4)
+  const b64 = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/')
+  const raw = atob(b64)
+  const buffer = new ArrayBuffer(raw.length)
+  const view = new Uint8Array(buffer)
+  for (let i = 0; i < raw.length; i++) view[i] = raw.charCodeAt(i)
+  return view
 }
 
 async function openDocument(url: string) {
@@ -36,7 +46,40 @@ export default function Profile() {
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [dragOver, setDragOver] = useState(false)
+  const [pushState, setPushState] = useState<'idle' | 'loading' | 'enabled' | 'denied' | 'unsupported'>('idle')
   const fileRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      setPushState('unsupported')
+    } else if (Notification.permission === 'denied') {
+      setPushState('denied')
+    }
+  }, [])
+
+  async function enablePush() {
+    setPushState('loading')
+    try {
+      const permission = await Notification.requestPermission()
+      if (permission !== 'granted') {
+        setPushState('denied')
+        return
+      }
+      const reg = await navigator.serviceWorker.ready
+      const { data } = await api.get<{ publicKey: string }>('/notifications/vapid-public-key')
+      const sub =
+        (await reg.pushManager.getSubscription()) ??
+        (await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(data.publicKey),
+        }))
+      await api.post('/notifications/subscribe', sub)
+      setPushState('enabled')
+    } catch {
+      setPushState('idle')
+      alert("Impossible d'activer les alertes.")
+    }
+  }
 
   useEffect(() => {
     api.get<ProfileUser>('/auth/me')
@@ -171,6 +214,46 @@ export default function Profile() {
               onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadDocument(f) }}
             />
           </div>
+        )}
+
+        {/* Notifications Web Push (étudiant) */}
+        {user.role === 'ETUDIANT' && (
+          <>
+            <p className="mb-3 mt-7 text-xs font-bold uppercase tracking-[2px] text-slate-500">Notifications</p>
+            <div className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary-400">
+                  {pushState === 'enabled' ? <BellRing size={20} /> : <Bell size={20} />}
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">Alertes nouvelles offres</p>
+                  <p className="mt-0.5 text-xs text-slate-500">
+                    {pushState === 'enabled'
+                      ? 'Activées · vous serez prévenu pour vos favoris'
+                      : pushState === 'denied'
+                        ? 'Bloquées dans les réglages du navigateur'
+                        : pushState === 'unsupported'
+                          ? 'Non supporté sur cet appareil'
+                          : 'Soyez prévenu dès qu’un favori publie une offre'}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={enablePush}
+                disabled={pushState === 'enabled' || pushState === 'loading' || pushState === 'denied' || pushState === 'unsupported'}
+                className={cn(
+                  'flex-shrink-0 rounded-xl px-4 py-2.5 text-sm font-bold transition-all',
+                  pushState === 'enabled'
+                    ? 'cursor-default bg-emerald-500/15 text-emerald-500'
+                    : pushState === 'denied' || pushState === 'unsupported'
+                      ? 'cursor-not-allowed bg-slate-200 text-slate-400 dark:bg-slate-800'
+                      : 'bg-primary text-white hover:bg-violet-500 disabled:opacity-60',
+                )}
+              >
+                {pushState === 'enabled' ? '🔔 Activées' : pushState === 'loading' ? 'Activation…' : '🔔 Activer'}
+              </button>
+            </div>
+          </>
         )}
 
         {/* Zone RGPD / danger */}

@@ -22,5 +22,9 @@ CLAUDE.md
 skills-lock.json
 PROJET_NOTES.md 
 .claude
-.gitignore
 RESUME.md
+venv
+graphify-out
+caveman.md 
+skills.md 
+taches.md 

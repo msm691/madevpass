@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import confetti from 'canvas-confetti'
 import { Bell } from 'lucide-react'
 import StudentCard from '../../components/StudentCard/StudentCard'
 import BottomNav from '../../components/BottomNav/BottomNav'
@@ -7,10 +8,31 @@ import Navigation from '../../components/Navigation/Navigation'
 import type { StudentUser } from '../../types/user'
 import api from '../../api/client'
 
+const ONBOARDING_KEY = 'madev:onboarded'
+
+function fireWelcomeConfetti() {
+  const colors = ['#7C3AED', '#a78bfa', '#ffffff', '#34d399']
+  const burst = (particleRatio: number, opts: confetti.Options) =>
+    confetti({
+      origin: { y: 0.7 },
+      colors,
+      particleCount: Math.floor(200 * particleRatio),
+      ...opts,
+    })
+
+  burst(0.25, { spread: 26, startVelocity: 55 })
+  burst(0.2, { spread: 60 })
+  burst(0.35, { spread: 100, decay: 0.91, scalar: 0.8 })
+  burst(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 })
+  burst(0.1, { spread: 120, startVelocity: 45 })
+}
+
 export default function Dashboard() {
   const [user, setUser] = useState<StudentUser | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  // Première connexion : déclenche confettis + déverrouillage 3D de la carte
+  const firstLoginRef = useRef(!sessionStorage.getItem(ONBOARDING_KEY))
 
   useEffect(() => {
     api
@@ -24,6 +46,13 @@ export default function Dashboard() {
       .finally(() => setLoading(false))
   }, [])
 
+  useEffect(() => {
+    if (!user || !firstLoginRef.current) return
+    sessionStorage.setItem(ONBOARDING_KEY, '1')
+    const t = setTimeout(fireWelcomeConfetti, 700)
+    return () => clearTimeout(t)
+  }, [user])
+
   const center = 'flex h-screen items-center justify-center text-slate-500 dark:text-slate-400'
   if (loading) return <div className={center}>Chargement…</div>
   if (!user) return <div className={center}>Erreur de chargement</div>
@@ -34,7 +63,7 @@ export default function Dashboard() {
 
       <header className="relative flex items-start justify-between px-6 pb-6 pt-12">
         <div>
-          <p className="text-sm font-medium text-primary-400">Bonjour,</p>
+          <p className="text-sm font-medium text-primary-400">{firstLoginRef.current ? 'Bienvenue,' : 'Bonjour,'}</p>
           <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">{user.prenom} {user.nom}</h1>
         </div>
         <div className="flex items-center gap-2">
@@ -50,7 +79,7 @@ export default function Dashboard() {
 
       <section className="relative flex flex-col items-center gap-3 px-6 pt-2">
         <p className="self-start text-xs font-bold uppercase tracking-[2px] text-slate-500">Ma carte</p>
-        <StudentCard user={user} />
+        <StudentCard user={user} reveal={firstLoginRef.current} />
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
