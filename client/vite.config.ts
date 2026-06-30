@@ -18,6 +18,10 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
         importScripts: ['push-sw.js'],
       },
+      devOptions: {
+        enabled: true,
+        type: 'classic',
+      },
     }),
   ],
   server: {

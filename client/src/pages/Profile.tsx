@@ -65,7 +65,13 @@ export default function Profile() {
         setPushState('denied')
         return
       }
-      const reg = await navigator.serviceWorker.ready
+      // serviceWorker.ready ne se résout jamais si aucun SW n'est enregistré : on borne l'attente
+      const reg = await Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise<never>((_, rej) =>
+          setTimeout(() => rej(new Error('SW_TIMEOUT')), 8000),
+        ),
+      ])
       const { data } = await api.get<{ publicKey: string }>('/notifications/vapid-public-key')
       const sub =
         (await reg.pushManager.getSubscription()) ??

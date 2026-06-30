@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { QrCode, User, Users, Tag, Store, UserPlus, FolderTree, LayoutDashboard, LogOut, Menu } from 'lucide-react'
+import { QrCode, User, Users, Tag, Store, UserPlus, FolderTree, LayoutDashboard, ClipboardCheck, LogOut, Menu } from 'lucide-react'
 import type { Role } from '../../types/user'
 import ThemeToggle from '../ui/ThemeToggle'
 
@@ -19,6 +19,7 @@ const MENU_ITEMS: Item[] = [
   { name: 'QR Code', path: '__qr__', roles: ['ADMIN', 'ETUDIANT', 'COMMERCANT'], icon: QrCode },
   { name: 'Informations', path: '/profile', roles: ['ADMIN', 'ETUDIANT', 'COMMERCANT'], icon: User },
   { name: 'Tableau de bord', path: '/admin/dashboard', roles: ['ADMIN'], icon: LayoutDashboard },
+  { name: "Demandes d'inscription", path: '/admin/validation', roles: ['ADMIN'], icon: ClipboardCheck },
   { name: 'Liste des comptes', path: '/admin/users', roles: ['ADMIN'], icon: Users },
   { name: 'Commerçants', path: '/admin/commercants', roles: ['ADMIN'], icon: Store },
   { name: 'Catégories', path: '/admin/categories', roles: ['ADMIN'], icon: FolderTree },
