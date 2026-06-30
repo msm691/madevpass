@@ -1,0 +1,48 @@
+import { useLocation, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { CreditCard, Search, Heart } from 'lucide-react'
+import { cn } from '../../lib/utils'
+
+const TABS = [
+  { path: '/carte', label: 'Ma carte', icon: CreditCard },
+  { path: '/annuaire', label: 'Annuaire', icon: Search },
+  { path: '/favoris', label: 'Favoris', icon: Heart },
+]
+
+export default function BottomNav() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  return (
+    <nav className="fixed inset-x-0 bottom-0 z-40 mx-auto flex max-w-md items-center justify-around border-t border-slate-200/70 bg-white/70 px-2 pb-[env(safe-area-inset-bottom)] pt-2 backdrop-blur-xl dark:border-slate-800/70 dark:bg-slate-900/60">
+      {TABS.map((tab) => {
+        const active = location.pathname === tab.path
+        const Icon = tab.icon
+        return (
+          <button
+            key={tab.path}
+            onClick={() => navigate(tab.path)}
+            aria-label={tab.label}
+            className="relative flex flex-1 flex-col items-center gap-1 rounded-xl py-2"
+          >
+            {active && (
+              <motion.span
+                layoutId="bottomnav-active"
+                className="absolute inset-0 rounded-xl bg-primary/10"
+                transition={{ type: 'spring', damping: 24, stiffness: 320 }}
+              />
+            )}
+            <Icon
+              size={22}
+              className={cn('relative z-10 transition-colors', active ? 'text-primary' : 'text-slate-400')}
+              fill={tab.label === 'Favoris' && active ? 'currentColor' : 'none'}
+            />
+            <span className={cn('relative z-10 text-[11px] font-semibold transition-colors', active ? 'text-primary' : 'text-slate-400')}>
+              {tab.label}
+            </span>
+          </button>
+        )
+      })}
+    </nav>
+  )
+}

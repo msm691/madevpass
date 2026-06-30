@@ -1,0 +1,39 @@
+{
+  "name": "madevpass-client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "^5.2.9",
+    "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/runtime": "^1.12.98",
+    "axios": "^1.7.2",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.42.0",
+    "geist": "^1.7.2",
+    "html5-qrcode": "^2.3.8",
+    "lucide-react": "^1.22.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-fast-marquee": "^1.6.5",
+    "react-parallax-tilt": "^1.7.333",
+    "react-router-dom": "^6.24.1",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.5.2",
+    "postcss": "^8.5.16",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3"
+  }
+}
