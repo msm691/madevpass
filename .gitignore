@@ -1,0 +1,26 @@
+node_modules/
+dist/
+.env
+*.local
+
+# Prisma
+server/prisma/migrations/
+server/prisma/dev.db
+server/prisma/*.db
+
+# Uploads
+server/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Autre
+.agents
+.claudeignore
+CLAUDE.md
+skills-lock.json
+PROJET_NOTES.md 
+.claude
+.gitignore
+RESUME.md

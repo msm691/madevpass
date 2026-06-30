@@ -39,43 +39,63 @@ const registerSchema = z.object({
   nom: z.string().min(1),
 });
 
+// Wrapper Multer : renvoie une erreur JSON propre si l'upload échoue
+const uploadAttestation = (req: any, res: any, next: any) => {
+  upload.single('attestation')(req, res, (err: any) => {
+    if (err) {
+      const message =
+        err instanceof multer.MulterError
+          ? err.code === 'LIMIT_FILE_SIZE'
+            ? 'Fichier trop volumineux (5 Mo max)'
+            : 'Erreur lors de l\'envoi du fichier'
+          : err.message || 'Upload invalide';
+      res.status(400).json({ error: message });
+      return;
+    }
+    next();
+  });
+};
+
 // POST /api/auth/register
-router.post('/register', upload.single('attestation'), async (req, res) => {
-  const parsed = registerSchema.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.flatten() });
-    return;
+router.post('/register', uploadAttestation, async (req, res) => {
+  try {
+    const parsed = registerSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.flatten() });
+      return;
+    }
+    const { email, password, prenom, nom } = parsed.data;
+
+    const passwordHash = await bcrypt.hash(password, 12);
+    const documentAttestationUrl = req.file ? `/uploads/${req.file.filename}` : null;
+
+    await prisma.user.create({
+      data: {
+        email,
+        passwordHash,
+        prenom,
+        nom,
+        role: 'ETUDIANT',
+        isActif: false,
+        // Sans justificatif : en attente du document. Sinon : en attente de validation admin.
+        statutInscription: documentAttestationUrl ? 'EN_ATTENTE' : 'PENDING_DOCUMENT',
+        documentAttestationUrl,
+      },
+    });
+
+    res.status(201).json({
+      message: documentAttestationUrl
+        ? 'Inscription reçue, en attente de validation admin'
+        : 'Inscription reçue, justificatif à envoyer ultérieurement',
+    });
+  } catch (err: any) {
+    if (err?.code === 'P2002') {
+      res.status(400).json({ error: 'Cet email est déjà utilisé.' });
+      return;
+    }
+    console.error('[register]', err);
+    res.status(500).json({ error: 'Erreur serveur lors de l\'inscription' });
   }
-  const { email, password, prenom, nom } = parsed.data;
-
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    res.status(409).json({ error: 'Cet email est déjà utilisé' });
-    return;
-  }
-
-  const passwordHash = await bcrypt.hash(password, 12);
-  const documentAttestationUrl = req.file ? `/uploads/${req.file.filename}` : null;
-
-  await prisma.user.create({
-    data: {
-      email,
-      passwordHash,
-      prenom,
-      nom,
-      role: 'ETUDIANT',
-      isActif: false,
-      // Sans justificatif : en attente du document. Sinon : en attente de validation admin.
-      statutInscription: documentAttestationUrl ? 'EN_ATTENTE' : 'PENDING_DOCUMENT',
-      documentAttestationUrl,
-    },
-  });
-
-  res.status(201).json({
-    message: documentAttestationUrl
-      ? 'Inscription reçue, en attente de validation admin'
-      : 'Inscription reçue, justificatif à envoyer ultérieurement',
-  });
 });
 
 const loginSchema = z.object({
