@@ -114,7 +114,7 @@ export default function Validation() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.4) }}
-            className="group flex flex-col gap-4 rounded-2xl border border-stone-200 bg-white p-5 transition-all duration-300 hover:border-cobalt-500/40 hover:shadow-card-hover dark:border-white/10 dark:bg-ink-900 sm:flex-row sm:items-center"
+            className="lift group flex flex-col gap-4 rounded-2xl border border-black/[0.06] bg-white p-5 hover:border-cobalt-500/40 dark:border-white/[0.07] dark:bg-ink-900 sm:flex-row sm:items-center"
           >
             <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-cobalt-600 to-cobalt-400 text-sm font-bold uppercase text-white">
               {u.prenom[0]}{u.nom[0]}
@@ -149,7 +149,7 @@ export default function Validation() {
               <button
                 onClick={() => valider(u.id)}
                 disabled={validating === u.id || refusing === u.id}
-                className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-emerald-600 active:scale-[0.98] disabled:opacity-50"
+                className="flex items-center gap-1.5 rounded-xl bg-success px-3.5 py-2 text-xs font-bold text-white shadow-e2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-e3 active:scale-[0.98] disabled:opacity-50"
               >
                 <Check size={14} strokeWidth={2} />
                 {validating === u.id ? '…' : 'Valider'}

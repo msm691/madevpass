@@ -39,9 +39,13 @@ export default function Landing() {
 /* Ambient cobalt intentionnel (remplace le fond 3D générique) */
 function Ambient() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 bg-cream dark:bg-ink-950">
-      <div className="absolute -top-48 left-1/2 h-[620px] w-[920px] -translate-x-1/2 rounded-full bg-cobalt-500/[0.10] blur-[130px] dark:bg-cobalt-600/20" />
-      <div className="absolute bottom-[-10%] right-[-5%] h-[420px] w-[520px] rounded-full bg-cobalt-400/[0.06] blur-[110px] dark:bg-cobalt-500/10" />
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-cream dark:bg-ink-950">
+      {/* Grille technique estompée en tête de page */}
+      <div className="grid-bg absolute inset-x-0 top-0 h-[70vh] opacity-40 dark:opacity-30" />
+      {/* Halos aurora en dérive lente */}
+      <div className="aurora-blob -top-48 left-1/2 h-[620px] w-[920px] -translate-x-1/2 bg-cobalt-500/[0.11] dark:bg-cobalt-600/25" />
+      <div className="aurora-blob bottom-[-10%] right-[-5%] h-[420px] w-[520px] bg-cobalt-400/[0.07] [animation-delay:-6s] dark:bg-cobalt-500/12" />
+      <div className="aurora-blob left-[-8%] top-[40%] h-[380px] w-[420px] bg-[#7C5CFF]/[0.06] [animation-delay:-11s] dark:bg-[#7C5CFF]/12" />
     </div>
   )
 }
@@ -104,8 +108,8 @@ function Hero() {
           <span className="h-1.5 w-1.5 rounded-full bg-cobalt-500" /> Carte étudiante numérique · Vienne
         </motion.span>
 
-        <motion.h1 variants={fadeUp} className="mt-5 font-display text-5xl font-bold leading-[1.02] tracking-tight text-ink-900 dark:text-white sm:text-6xl">
-          La carte étudiante,<br /><span className="text-cobalt-600 dark:text-cobalt-400">enfin numérique.</span>
+        <motion.h1 variants={fadeUp} className="mt-5 text-display-xl text-ink-900 dark:text-white">
+          La carte étudiante,<br /><span className="text-gradient">enfin numérique.</span>
         </motion.h1>
 
         <motion.p variants={fadeUp} className="mx-auto mt-5 max-w-md text-pretty text-base leading-relaxed text-stone-600 dark:text-stone-400 sm:text-lg md:mx-0">
@@ -202,12 +206,13 @@ function Features() {
           return (
             <Reveal key={f.title} delay={i * 0.06} className={f.span}>
               <article className={cn(
-                'group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border p-6 transition-shadow sm:p-7',
+                'sheen lift group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border p-6 sm:p-7',
                 f.tint
                   ? 'border-cobalt-500/20 bg-cobalt-500/[0.06] dark:border-cobalt-400/15 dark:bg-cobalt-500/10'
-                  : 'border-stone-200 bg-white/70 hover:shadow-card-hover dark:border-white/10 dark:bg-ink-900/55',
+                  : 'border-stone-200 bg-white/70 dark:border-white/10 dark:bg-ink-900/55',
               )}>
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cobalt-500/12 text-cobalt-600 dark:text-cobalt-300">
+                {f.tint && <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cobalt-500/15 blur-2xl" />}
+                <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-cobalt-500/12 text-cobalt-600 transition-transform duration-300 group-hover:scale-110 dark:text-cobalt-300">
                   <Icon size={22} strokeWidth={1.75} />
                 </div>
                 <div>
@@ -281,9 +286,11 @@ function CtaBand() {
   return (
     <section className="relative mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-20">
       <Reveal>
-        <div className="glow-ring relative overflow-hidden rounded-3xl bg-ink-950 px-6 py-12 text-center sm:px-12 sm:py-16">
-          <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-cobalt-500/40 blur-[110px]" />
-          <h2 className="relative font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Activez votre carte en 2 clics</h2>
+        <div className="glow-ring border-gradient relative overflow-hidden rounded-3xl bg-ink-950 px-6 py-12 text-center sm:px-12 sm:py-16">
+          <div className="pointer-events-none absolute inset-0 bg-grid-line bg-grid opacity-[0.15]" />
+          <div className="aurora-blob -top-24 left-1/2 h-72 w-72 -translate-x-1/2 bg-cobalt-500/40" />
+          <div className="aurora-blob bottom-[-30%] right-[10%] h-60 w-60 bg-[#7C5CFF]/30 [animation-delay:-8s]" />
+          <h2 className="relative text-display-md text-white">Activez votre carte en 2 clics</h2>
           <p className="relative mx-auto mt-4 max-w-md text-stone-300">
             Inscription gratuite. Validez votre statut étudiant et profitez des offres immédiatement.
           </p>
@@ -348,11 +355,11 @@ function FooterCol({ title, links }: { title: string; links: [string, string][] 
 /* ─── Primitives ──────────────────────────────────────────── */
 function Btn({ to, children, size = 'md', icon = false }: { to: string; children: React.ReactNode; size?: 'md' | 'lg'; icon?: boolean }) {
   return (
-    <motion.div whileTap={{ scale: 0.98 }} transition={spring} className={cn(size === 'lg' && 'w-full sm:w-auto')}>
+    <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} transition={spring} className={cn(size === 'lg' && 'w-full sm:w-auto')}>
       <Link
         to={to}
         className={cn(
-          'inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cobalt-500 font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600',
+          'sheen inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cobalt-500 font-bold text-white shadow-cobalt transition-shadow duration-300 hover:bg-cobalt-600 hover:shadow-e4',
           size === 'lg' ? 'px-6 py-3.5 text-base' : 'px-4 py-2 text-sm',
           icon && 'group',
         )}

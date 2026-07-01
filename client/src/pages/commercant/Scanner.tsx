@@ -209,8 +209,9 @@ export default function Scanner() {
               onClick={startScan}
               disabled={starting}
               whileTap={{ scale: 0.94 }}
-              className="flex h-40 w-40 flex-col items-center justify-center gap-2 rounded-full bg-cobalt-500 text-white shadow-[0_0_60px_-4px_rgba(35,71,230,0.9)] ring-8 ring-cobalt-500/20 transition-colors hover:bg-cobalt-600 disabled:opacity-70"
+              className="relative flex h-40 w-40 flex-col items-center justify-center gap-2 rounded-full bg-cobalt-500 text-white shadow-[0_0_60px_-4px_rgba(35,71,230,0.9)] ring-8 ring-cobalt-500/20 transition-colors hover:bg-cobalt-600 disabled:opacity-70"
             >
+              <span className="pointer-events-none absolute inset-0 animate-pulse-ring rounded-full" />
               <Camera size={46} strokeWidth={1.75} />
               <span className="text-sm font-bold uppercase tracking-wider">
                 {starting ? 'Activation…' : 'Démarrer'}

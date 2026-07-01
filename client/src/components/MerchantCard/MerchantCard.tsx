@@ -17,13 +17,12 @@ export default function MerchantCard({ commerce, isFavori = false, onToggleFavor
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      whileHover={{ scale: 0.99 }}
-      className="group relative overflow-hidden rounded-2xl border border-stone-200 bg-white p-5 transition-all duration-300 hover:border-cobalt-500/40 hover:shadow-card-hover dark:border-white/10 dark:bg-ink-900"
+      className="lift group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-5 hover:border-cobalt-500/40 dark:border-white/[0.07] dark:bg-ink-900"
     >
       <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-cobalt-500/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:translate-x-full group-hover:opacity-100" />
 
       <div className="flex items-start gap-3">
-        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-cobalt-500/10 text-2xl">
+        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-cobalt-500/10 text-2xl transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3">
           {icone}
         </div>
 
@@ -43,18 +42,26 @@ export default function MerchantCard({ commerce, isFavori = false, onToggleFavor
                 : `${commerce.distanceKm.toFixed(1)} km`}
             </span>
           )}
-          <button
+          <motion.button
+            whileTap={{ scale: 0.85 }}
             onClick={(e) => { e.stopPropagation(); onToggleFavori?.(commerce.id) }}
             aria-label={isFavori ? 'Retirer des favoris' : 'Ajouter aux favoris'}
             className={cn(
               'flex h-9 w-9 items-center justify-center rounded-xl border transition-colors',
               isFavori
-                ? 'border-red-500/50 bg-red-500/10 text-red-500'
-                : 'border-stone-200 text-stone-400 hover:border-red-500/40 hover:text-red-500 dark:border-white/10',
+                ? 'border-danger/50 bg-danger/10 text-danger'
+                : 'border-stone-200 text-stone-400 hover:border-danger/40 hover:text-danger dark:border-white/10',
             )}
           >
-            <Heart size={17} strokeWidth={1.75} fill={isFavori ? 'currentColor' : 'none'} />
-          </button>
+            <motion.span
+              key={String(isFavori)}
+              initial={{ scale: 0.6 }}
+              animate={{ scale: isFavori ? [1, 1.35, 1] : 1 }}
+              transition={{ duration: 0.35, ease: [0.34, 1.56, 0.64, 1] }}
+            >
+              <Heart size={17} strokeWidth={1.75} fill={isFavori ? 'currentColor' : 'none'} />
+            </motion.span>
+          </motion.button>
         </div>
       </div>
 

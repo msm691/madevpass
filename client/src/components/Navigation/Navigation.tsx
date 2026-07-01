@@ -92,17 +92,20 @@ export default function Navigation() {
               transition={{ duration: 0.16 }}
               className="glass absolute right-0 z-overlay mt-2 w-56 overflow-hidden rounded-2xl p-2 shadow-card-hover"
             >
-              {visibleItems.map(item => {
+              {visibleItems.map((item, i) => {
                 const Icon = item.icon
                 return (
-                  <button
+                  <motion.button
                     key={item.name}
+                    initial={{ opacity: 0, x: -6 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.03 + i * 0.03, duration: 0.2 }}
                     onClick={() => go(item)}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-stone-700 transition-colors hover:bg-cobalt-500/10 hover:text-cobalt-600 dark:text-stone-200 dark:hover:text-cobalt-300"
+                    className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-stone-700 transition-colors hover:bg-cobalt-500/10 hover:text-cobalt-600 dark:text-stone-200 dark:hover:text-cobalt-300"
                   >
-                    <Icon size={17} strokeWidth={1.75} />
+                    <Icon size={17} strokeWidth={1.75} className="transition-transform duration-200 group-hover:scale-110" />
                     {item.name}
-                  </button>
+                  </motion.button>
                 )
               })}
               <div className="my-1 h-px bg-stone-200 dark:bg-white/10" />

@@ -91,13 +91,14 @@ export default function MerchantEdit() {
   const label = 'mb-1.5 block text-sm font-semibold text-stone-600 dark:text-stone-300'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-cream dark:bg-ink-950">
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
+    <div className="grain relative min-h-screen overflow-hidden bg-cream dark:bg-ink-950">
+      <div className="grid-bg pointer-events-none absolute inset-x-0 top-0 h-72 opacity-40 dark:opacity-25" />
+      <div className="aurora-blob -top-40 left-1/2 h-96 w-96 -translate-x-1/2 bg-cobalt-500/15" />
 
       <header className="relative flex items-start justify-between px-6 pb-7 pt-12">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[2px] text-primary-400">Mon commerce</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink-900 dark:text-stone-50">{commerce.nom}</h1>
+          <p className="text-eyebrow uppercase text-cobalt-600 dark:text-cobalt-400">Mon commerce</p>
+          <h1 className="mt-1.5 font-display text-2xl font-bold tracking-tight text-ink-900 dark:text-white">{commerce.nom}</h1>
         </div>
         <Navigation />
       </header>
@@ -108,7 +109,7 @@ export default function MerchantEdit() {
           {!isEditing && (
             <button
               onClick={() => setIsEditing(true)}
-              className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-cobalt-500"
+              className="sheen flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white shadow-cobalt-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-cobalt-600 hover:shadow-e3"
             >
               <Pencil size={14} />
               Modifier
@@ -127,7 +128,7 @@ export default function MerchantEdit() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden rounded-2xl border border-stone-200 bg-white dark:border-ink-800 dark:bg-ink-900"
+            className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white shadow-e2 dark:border-white/[0.07] dark:bg-ink-900"
           >
             {([
               ['Nom du commerce', commerce.nom],

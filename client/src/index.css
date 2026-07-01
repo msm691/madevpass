@@ -3,11 +3,31 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Tokens de motion partagés (JS + CSS lisent la même source) */
+    --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --dur-fast: 140ms;
+    --dur-base: 240ms;
+    --dur-slow: 420ms;
+  }
+
   * { box-sizing: border-box; }
 
   html {
     font-family: '"Geist Variable"', Geist, system-ui, sans-serif;
     scroll-behavior: smooth;
+  }
+
+  /* Respect strict de l'accessibilité : coupe tout mouvement non essentiel */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   body {
@@ -81,4 +101,91 @@
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
   }
   .dark .skeleton::after { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent); }
+
+  /* Surfaces élevées : carte premium avec liseré interne + élévation continue */
+  .surface {
+    @apply bg-white border border-black/[0.06] shadow-e2 dark:bg-ink-900 dark:border-white/[0.07];
+  }
+  .surface-raised {
+    @apply bg-white border border-black/[0.06] shadow-e4 dark:bg-ink-850 dark:border-white/[0.08];
+  }
+  /* Micro-lift au survol — accent cobalt (transition motion-token) */
+  .lift {
+    @apply transition-[transform,box-shadow] duration-300 ease-smooth will-change-transform;
+  }
+  .lift:hover { @apply -translate-y-0.5 shadow-e4; }
+
+  /* Texte en dégradé cobalt (titres accentués, chiffres clés) */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(120deg, #2347E6 0%, #6680F4 45%, #7C5CFF 100%);
+  }
+  .dark .text-gradient {
+    background-image: linear-gradient(120deg, #97A9FB 0%, #6680F4 45%, #C3CEFE 100%);
+  }
+
+  /* Bordure en dégradé (cards héros, CTA encadrés) */
+  .border-gradient {
+    position: relative;
+    background-clip: padding-box;
+    border: 1px solid transparent;
+  }
+  .border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(35,71,230,0.55), rgba(124,92,255,0.25), transparent 70%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Fond maillé cobalt (héros, en-têtes de dashboard) */
+  .mesh-bg { background-image: theme('backgroundImage.mesh-cobalt'); }
+
+  /* Grille technique discrète (fonds de section) */
+  .grid-bg {
+    background-image: theme('backgroundImage.grid-line');
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+  }
+
+  /* Halo lumineux animé (blobs d'ambiance derrière le contenu) */
+  .aurora-blob {
+    @apply pointer-events-none absolute rounded-full blur-3xl animate-aurora;
+    mix-blend-mode: normal;
+  }
+
+  /* Séparateur fin teinté */
+  .hairline { @apply border-black/[0.07] dark:border-white/[0.08]; }
+
+  /* Chorégraphie stagger : appliquer .stagger sur le parent, .stagger-item sur les enfants */
+  .stagger > .stagger-item { @apply animate-reveal-up; opacity: 0; }
+  .stagger > .stagger-item:nth-child(1) { animation-delay: 0.04s; }
+  .stagger > .stagger-item:nth-child(2) { animation-delay: 0.10s; }
+  .stagger > .stagger-item:nth-child(3) { animation-delay: 0.16s; }
+  .stagger > .stagger-item:nth-child(4) { animation-delay: 0.22s; }
+  .stagger > .stagger-item:nth-child(5) { animation-delay: 0.28s; }
+  .stagger > .stagger-item:nth-child(6) { animation-delay: 0.34s; }
+  .stagger > .stagger-item:nth-child(7) { animation-delay: 0.40s; }
+  .stagger > .stagger-item:nth-child(8) { animation-delay: 0.46s; }
+
+  /* Balayage lumineux sur survol (boutons/cards premium) */
+  .sheen { position: relative; overflow: hidden; }
+  .sheen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: theme('backgroundImage.shine');
+    background-size: 220% 100%;
+    background-position: 150% 0;
+    opacity: 0;
+    transition: opacity 0.2s ease, background-position 0.7s cubic-bezier(0.22,1,0.36,1);
+    pointer-events: none;
+  }
+  .sheen:hover::after { opacity: 1; background-position: -40% 0; }
 }

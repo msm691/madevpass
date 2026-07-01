@@ -33,7 +33,7 @@ export default function AdminQR() {
             initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-sm rounded-3xl border border-stone-200 bg-white p-8 shadow-card-hover dark:border-white/10 dark:bg-ink-900"
+            className="border-gradient w-full max-w-sm rounded-3xl border border-stone-200 bg-white p-8 shadow-e4 dark:border-white/10 dark:bg-ink-900"
           >
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cobalt-500/15 text-cobalt-600 dark:text-cobalt-400">

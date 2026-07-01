@@ -25,8 +25,9 @@ export default function Modal({ open, onClose, title, children }: Props) {
             exit={{ opacity: 0, scale: 0.94, y: 16 }}
             transition={{ type: 'spring', damping: 26, stiffness: 320 }}
             onClick={e => e.stopPropagation()}
-            className="relative w-full max-w-md rounded-3xl border border-stone-200 bg-white p-7 shadow-card-hover dark:border-white/10 dark:bg-ink-900"
+            className="border-gradient relative w-full max-w-md overflow-hidden rounded-3xl border border-stone-200 bg-white p-7 shadow-e5 dark:border-white/10 dark:bg-ink-900"
           >
+            <div className="pointer-events-none absolute -top-16 left-1/2 h-40 w-64 -translate-x-1/2 rounded-full bg-cobalt-500/10 blur-3xl" />
             <button
               onClick={onClose}
               aria-label="Fermer"

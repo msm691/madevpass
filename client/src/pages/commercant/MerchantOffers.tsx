@@ -158,13 +158,14 @@ export default function MerchantOffers() {
   const label = 'mb-1.5 block text-xs font-semibold text-stone-600 dark:text-stone-300'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-cream pb-12 dark:bg-ink-950">
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
+    <div className="grain relative min-h-screen overflow-hidden bg-cream pb-12 dark:bg-ink-950">
+      <div className="grid-bg pointer-events-none absolute inset-x-0 top-0 h-72 opacity-40 dark:opacity-25" />
+      <div className="aurora-blob -top-40 left-1/2 h-96 w-96 -translate-x-1/2 bg-cobalt-500/15" />
 
       <header className="relative flex items-start justify-between px-6 pb-7 pt-12">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[2px] text-primary-400">Mon commerce</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink-900 dark:text-stone-50">Mes Offres</h1>
+          <p className="text-eyebrow uppercase text-cobalt-600 dark:text-cobalt-400">Mon commerce</p>
+          <h1 className="mt-1.5 font-display text-2xl font-bold tracking-tight text-ink-900 dark:text-white">Mes Offres</h1>
         </div>
         <Navigation />
       </header>
@@ -174,7 +175,7 @@ export default function MerchantOffers() {
           <p className="text-xs font-bold uppercase tracking-[2px] text-stone-500">Offres actives ({offres.length})</p>
           <button
             onClick={() => showForm ? closeForm() : setShowForm(true)}
-            className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-cobalt-500"
+            className="sheen flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white shadow-cobalt-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-cobalt-600 hover:shadow-e3"
           >
             {showForm ? <><X size={14} /> Annuler</> : <><Plus size={14} /> Nouvelle offre</>}
           </button>
@@ -253,7 +254,7 @@ export default function MerchantOffers() {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
-                className="rounded-2xl border border-stone-200 bg-white p-5 transition-colors hover:border-primary/40 dark:border-ink-800 dark:bg-ink-900"
+                className="lift rounded-2xl border border-black/[0.06] bg-white p-5 hover:border-primary/40 dark:border-white/[0.07] dark:bg-ink-900"
               >
                 <div className="flex items-start justify-between gap-3">
                   <span className="flex items-center gap-2 font-bold text-ink-900 dark:text-stone-100">

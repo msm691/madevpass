@@ -36,7 +36,7 @@ export default function Login() {
     }
   }
 
-  const input = 'w-full rounded-lg border border-stone-300 bg-white px-4 py-3 text-sm text-ink-900 outline-none transition-colors placeholder:text-stone-400 focus:border-cobalt-500 dark:border-white/10 dark:bg-ink-900 dark:text-stone-100 dark:placeholder:text-stone-500'
+  const input = 'w-full rounded-lg border border-stone-300 bg-white px-4 py-3 text-sm text-ink-900 outline-none transition-all duration-200 placeholder:text-stone-400 focus:border-cobalt-500 focus:ring-2 focus:ring-cobalt-500/20 dark:border-white/10 dark:bg-ink-900 dark:text-stone-100 dark:placeholder:text-stone-500'
   const label = 'mb-1.5 block text-sm font-medium text-stone-700 dark:text-stone-300'
 
   return (
@@ -80,8 +80,8 @@ export default function Login() {
             )}
 
             <motion.button
-              type="submit" disabled={loading} whileTap={{ scale: 0.98 }}
-              className="rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600 disabled:cursor-not-allowed disabled:opacity-60"
+              type="submit" disabled={loading} whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}
+              className="sheen rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-all duration-300 hover:bg-cobalt-600 hover:shadow-e4 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? 'Connexion…' : 'Se connecter'}
             </motion.button>

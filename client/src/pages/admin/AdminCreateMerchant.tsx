@@ -79,7 +79,7 @@ export default function AdminCreateMerchant() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
         onSubmit={handleSubmit}
-        className="flex flex-col gap-5 rounded-2xl border border-stone-200 bg-white p-6 shadow-card dark:border-white/10 dark:bg-ink-900"
+        className="flex flex-col gap-5 rounded-3xl border border-black/[0.06] bg-white p-6 shadow-e3 dark:border-white/[0.07] dark:bg-ink-900"
         noValidate
       >
         <p className={section}>
@@ -155,7 +155,7 @@ export default function AdminCreateMerchant() {
         <button
           type="submit"
           disabled={saving}
-          className="rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600 disabled:opacity-60"
+          className="sheen rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-all duration-300 hover:bg-cobalt-600 hover:shadow-e4 disabled:opacity-60"
         >
           {saving ? 'Création…' : 'Créer le compte commerçant'}
         </button>

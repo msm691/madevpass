@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useMotionTemplate, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
 import { QRCodeSVG } from 'qrcode.react'
-import { Maximize2, RefreshCw } from 'lucide-react'
+import { Maximize2, RefreshCw, ShieldCheck } from 'lucide-react'
 import type { StudentUser } from '../../types/user'
 import Modal from '../ui/Modal'
 
@@ -18,6 +18,39 @@ function buildQr(user: StudentUser, minuteTs: number) {
 export default function StudentCard({ user, reveal = false }: Props) {
   const [open, setOpen] = useState(false)
   const [now, setNow] = useState(() => Date.now())
+  const prefersReduced = useReducedMotion()
+  const cardRef = useRef<HTMLButtonElement>(null)
+
+  // Tilt 3D + reflet dynamique suivant le curseur (ressort pour un rendu physique)
+  const rx = useMotionValue(0)
+  const ry = useMotionValue(0)
+  const gx = useMotionValue(50)
+  const gy = useMotionValue(0)
+  const srx = useSpring(rx, { stiffness: 160, damping: 18, mass: 0.4 })
+  const sry = useSpring(ry, { stiffness: 160, damping: 18, mass: 0.4 })
+  // Glare : halo lumineux positionné sous le curseur
+  const glare = useMotionTemplate`radial-gradient(circle at ${gx}% ${gy}%, rgba(255,255,255,0.28), transparent 55%)`
+  // Reflet holographique : bande spectrale qui glisse avec l'inclinaison
+  const holo = useMotionTemplate`linear-gradient(${gx}deg, transparent 30%, rgba(151,169,251,0.16) 45%, rgba(124,92,255,0.20) 50%, rgba(18,165,201,0.16) 55%, transparent 70%)`
+
+  function onMove(e: React.MouseEvent<HTMLButtonElement>) {
+    if (prefersReduced) return
+    const el = cardRef.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const px = (e.clientX - r.left) / r.width
+    const py = (e.clientY - r.top) / r.height
+    ry.set((px - 0.5) * 16)
+    rx.set((0.5 - py) * 12)
+    gx.set(px * 100)
+    gy.set(py * 100)
+  }
+  function onLeave() {
+    rx.set(0)
+    ry.set(0)
+    gx.set(50)
+    gy.set(0)
+  }
 
   // Tick chaque seconde uniquement quand le pop-up est ouvert (timer + rotation QR)
   useEffect(() => {
@@ -39,26 +72,35 @@ export default function StudentCard({ user, reveal = false }: Props) {
   return (
     <>
       <motion.button
+        ref={cardRef}
         type="button"
         onClick={() => setOpen(true)}
-        style={{ transformPerspective: 1200 }}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        style={{ transformPerspective: 1200, rotateX: srx, rotateY: sry, transformStyle: 'preserve-3d' }}
         initial={
           reveal
             ? { opacity: 0, rotateY: 180, rotateX: -25, scale: 0.82, y: 40 }
             : { opacity: 0, y: 24, scale: 0.97 }
         }
-        animate={{ opacity: 1, rotateY: 0, rotateX: 0, scale: 1, y: 0 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={
           reveal
             ? { duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }
-            : { duration: 0.45, ease: 'easeOut' }
+            : { duration: 0.55, ease: [0.22, 1, 0.36, 1] }
         }
-        whileHover={{ scale: 0.985 }}
-        className="group relative flex min-h-[220px] w-full max-w-sm flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-ink-900 via-ink-900 to-cobalt-950 p-6 text-left text-white shadow-cobalt transition-shadow duration-300 hover:shadow-[0_0_60px_-8px_rgba(35,71,230,0.75)]"
+        className="group relative flex min-h-[230px] w-full max-w-sm flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-ink-900 via-ink-900 to-cobalt-950 p-6 text-left text-white shadow-cobalt transition-shadow duration-300 hover:shadow-[0_0_70px_-10px_rgba(35,71,230,0.8)]"
       >
+        {/* Grille technique subtile gravée dans le fond */}
+        <div className="pointer-events-none absolute inset-0 bg-grid-line bg-grid opacity-[0.12]" />
+        {/* Reflet holographique dynamique */}
+        <motion.span className="pointer-events-none absolute inset-0 z-20 mix-blend-screen" style={{ backgroundImage: holo }} />
+        {/* Glare lumineux suivant le curseur */}
+        <motion.span className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{ backgroundImage: glare }} />
+
         {reveal && (
           <motion.span
-            className="pointer-events-none absolute inset-0 z-20 skew-x-12 bg-gradient-to-r from-transparent via-white/60 to-transparent"
+            className="pointer-events-none absolute inset-0 z-30 skew-x-12 bg-gradient-to-r from-transparent via-white/60 to-transparent"
             initial={{ x: '-150%' }}
             animate={{ x: '150%' }}
             transition={{ duration: 0.9, ease: 'easeInOut', delay: 0.9 }}
@@ -67,17 +109,17 @@ export default function StudentCard({ user, reveal = false }: Props) {
         <div className="pointer-events-none absolute -right-10 -top-16 h-52 w-52 rounded-full bg-cobalt-500/25 blur-2xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-8 h-48 w-48 rounded-full bg-cobalt-400/15 blur-2xl" />
 
-        <div className="relative z-10 flex items-start justify-between">
+        <div className="relative z-10 flex items-start justify-between" style={{ transform: 'translateZ(40px)' }}>
           <div className="flex flex-col">
             <span className="font-display text-lg font-bold tracking-wide text-white">MADEV Pass</span>
             <span className="mt-0.5 font-mono text-[10px] font-medium uppercase tracking-[2px] text-cobalt-300">Carte étudiante · Vienne</span>
           </div>
-          <span className="flex items-center gap-1 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-semibold text-stone-200 opacity-0 transition-opacity group-hover:opacity-100">
+          <span className="flex items-center gap-1 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-semibold text-stone-200 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
             <Maximize2 size={11} strokeWidth={1.75} /> Agrandir
           </span>
         </div>
 
-        <div className="relative z-10 mt-5 flex items-end justify-between">
+        <div className="relative z-10 mt-5 flex items-end justify-between" style={{ transform: 'translateZ(30px)' }}>
           <div className="flex flex-1 flex-col gap-2.5">
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-cobalt-500 to-cobalt-300 text-lg font-bold text-white ring-2 ring-white/15">
               {initiales}
@@ -94,8 +136,13 @@ export default function StudentCard({ user, reveal = false }: Props) {
             </span>
           </div>
 
-          <div className="ml-4 flex flex-shrink-0 items-center justify-center rounded-xl bg-white p-2 shadow-lg">
-            <QRCodeSVG value={buildQr(user, Math.floor(Date.now() / 60000))} size={88} level="M" />
+          <div className="ml-4 flex flex-shrink-0 flex-col items-center gap-1.5">
+            <div className="flex items-center justify-center rounded-xl bg-white p-2 shadow-lg ring-1 ring-black/5">
+              <QRCodeSVG value={buildQr(user, Math.floor(Date.now() / 60000))} size={88} level="M" />
+            </div>
+            <span className="flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-cobalt-300/80">
+              <ShieldCheck size={9} strokeWidth={2} /> Sécurisé
+            </span>
           </div>
         </div>
       </motion.button>
@@ -108,8 +155,9 @@ export default function StudentCard({ user, reveal = false }: Props) {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl bg-white p-5 shadow-cobalt-sm"
+            className="relative rounded-2xl bg-white p-5 shadow-cobalt-sm ring-1 ring-black/5"
           >
+            <div className="pointer-events-none absolute -inset-3 -z-10 rounded-3xl bg-mesh-cobalt opacity-70 blur-xl" />
             <QRCodeSVG value={qrValue} size={250} level="M" />
           </motion.div>
 

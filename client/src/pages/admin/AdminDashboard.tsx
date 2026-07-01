@@ -27,9 +27,9 @@ interface AdminCommerce {
 }
 
 const STATUTS = [
-  { key: 'ACCEPTE', label: 'Acceptés', color: '#10b981' }, // émeraude
-  { key: 'EN_ATTENTE', label: 'En attente', color: '#f59e0b' }, // ambre
-  { key: 'REJETE', label: 'Rejetés', color: '#f43f5e' }, // rose
+  { key: 'ACCEPTE', label: 'Acceptés', color: '#0F9E74' }, // émeraude (token success)
+  { key: 'EN_ATTENTE', label: 'En attente', color: '#E0900F' }, // ambre (token warning)
+  { key: 'REJETE', label: 'Rejetés', color: '#E1394B' }, // rose (token danger)
 ]
 
 function KpiCard({ icon: Icon, value, label, delay }: { icon: React.ElementType; value: string | number; label: string; delay: number }) {
@@ -37,11 +37,14 @@ function KpiCard({ icon: Icon, value, label, delay }: { icon: React.ElementType;
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay }}
-      className="relative overflow-hidden rounded-2xl border border-stone-200 bg-white p-5 shadow-card dark:border-white/10 dark:bg-ink-900"
+      transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="lift group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-5 shadow-e2 dark:border-white/[0.07] dark:bg-ink-900"
     >
-      <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-cobalt-500/15 blur-2xl" />
-      <Icon size={18} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" />
+      <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-cobalt-500/70 via-cobalt-400/40 to-transparent" />
+      <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-cobalt-500/15 blur-2xl transition-opacity duration-300 group-hover:opacity-80" />
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cobalt-500/12 text-cobalt-600 transition-transform duration-300 group-hover:scale-110 dark:text-cobalt-300">
+        <Icon size={17} strokeWidth={1.9} />
+      </div>
       <span className="tnum mt-3 block font-display text-3xl font-bold leading-none tracking-tight text-ink-900 dark:text-white">{value}</span>
       <span className="mt-1.5 block text-xs font-medium text-stone-500 dark:text-stone-400">{label}</span>
     </motion.div>
@@ -84,9 +87,9 @@ export default function AdminDashboard() {
     const data = STATUTS.map((s) => ({ name: s.label, value: counts[s.key] ?? 0, color: s.color }))
     // Fallback démo si aucune donnée encore
     return data.some((d) => d.value > 0) ? data : [
-      { name: 'Acceptés', value: 1280, color: '#10b981' },
-      { name: 'En attente', value: 540, color: '#f59e0b' },
-      { name: 'Rejetés', value: 100, color: '#f43f5e' },
+      { name: 'Acceptés', value: 1280, color: '#0F9E74' },
+      { name: 'En attente', value: 540, color: '#E0900F' },
+      { name: 'Rejetés', value: 100, color: '#E1394B' },
     ]
   }, [users])
 
@@ -110,8 +113,8 @@ export default function AdminDashboard() {
 
       <header className="relative flex items-start justify-between px-6 pb-7 pt-12">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[2px] text-primary-400">Espace Admin</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink-900 dark:text-stone-50">Tableau de bord</h1>
+          <p className="text-eyebrow uppercase text-cobalt-600 dark:text-cobalt-400">Espace Admin</p>
+          <h1 className="mt-1.5 font-display text-2xl font-bold tracking-tight text-ink-900 dark:text-white">Tableau de bord</h1>
         </div>
         <Navigation />
       </header>
@@ -131,7 +134,7 @@ export default function AdminDashboard() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.15 }}
-              className="mt-4 rounded-2xl border border-stone-200 bg-white p-5 shadow-card dark:border-white/10 dark:bg-ink-900"
+              className="mt-4 rounded-3xl border border-black/[0.06] bg-white p-5 shadow-e3 dark:border-white/[0.07] dark:bg-ink-900"
             >
               <div className="mb-2 flex items-center gap-2">
                 <PieIcon size={16} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" />
@@ -171,7 +174,7 @@ export default function AdminDashboard() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.2 }}
-              className="mt-4 rounded-2xl border border-stone-200 bg-white p-5 shadow-card dark:border-white/10 dark:bg-ink-900"
+              className="mt-4 rounded-3xl border border-black/[0.06] bg-white p-5 shadow-e3 dark:border-white/[0.07] dark:bg-ink-900"
             >
               <div className="mb-4 flex items-center gap-2">
                 <BarChart3 size={16} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" />
@@ -179,6 +182,12 @@ export default function AdminDashboard() {
               </div>
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={topCommerces} layout="vertical" margin={{ top: 0, right: 12, left: 8, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="barCobalt" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#1C39C9" />
+                      <stop offset="100%" stopColor="#6680F4" />
+                    </linearGradient>
+                  </defs>
                   <XAxis type="number" stroke={axis} fontSize={11} tickLine={false} axisLine={false} />
                   <YAxis
                     type="category"
@@ -190,7 +199,7 @@ export default function AdminDashboard() {
                     width={92}
                   />
                   <Tooltip cursor={{ fill: 'rgba(35,71,230,0.08)' }} contentStyle={tooltipStyle} labelStyle={{ color: '#2347E6', fontWeight: 700 }} />
-                  <Bar dataKey="scans" name="Scans" fill="#2347E6" radius={[0, 6, 6, 0]} barSize={18} />
+                  <Bar dataKey="scans" name="Scans" fill="url(#barCobalt)" radius={[0, 6, 6, 0]} barSize={18} />
                 </BarChart>
               </ResponsiveContainer>
             </motion.div>

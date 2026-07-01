@@ -62,7 +62,7 @@ export default function AdminCategories() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
         onSubmit={handleSubmit}
-        className="mb-7 rounded-2xl border border-stone-200 bg-white p-6 shadow-card dark:border-white/10 dark:bg-ink-900"
+        className="mb-7 rounded-3xl border border-black/[0.06] bg-white p-6 shadow-e3 dark:border-white/[0.07] dark:bg-ink-900"
       >
         <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
           <FolderPlus size={15} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" /> Nouvelle catégorie
@@ -103,9 +103,9 @@ export default function AdminCategories() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: Math.min(i * 0.03, 0.3) }}
-              className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white p-4 transition-colors hover:border-cobalt-500/40 dark:border-white/10 dark:bg-ink-900"
+              className="lift flex items-center gap-3 rounded-2xl border border-black/[0.06] bg-white p-4 hover:border-cobalt-500/40 dark:border-white/[0.07] dark:bg-ink-900"
             >
-              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-cobalt-500/10 text-xl">
+              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-cobalt-500/10 text-xl transition-transform duration-300 group-hover:scale-105">
                 {c.icone ?? <Tag size={18} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" />}
               </div>
               <div className="min-w-0 flex-1">

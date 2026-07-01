@@ -77,7 +77,9 @@ export default function Dashboard() {
 
   return (
     <div className="grain relative min-h-screen overflow-hidden bg-cream pb-28 dark:bg-ink-950">
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-cobalt-500/15 blur-3xl" />
+      <div className="grid-bg pointer-events-none absolute inset-x-0 top-0 h-72 opacity-40 dark:opacity-25" />
+      <div className="aurora-blob -top-40 left-1/2 h-96 w-96 -translate-x-1/2 bg-cobalt-500/15" />
+      <div className="aurora-blob right-[-10%] top-[30%] h-72 w-72 bg-[#7C5CFF]/10 [animation-delay:-7s]" />
 
       <header className="relative flex items-start justify-between px-6 pb-6 pt-12">
         <div>

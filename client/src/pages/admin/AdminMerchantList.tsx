@@ -102,7 +102,7 @@ export default function AdminMerchantList() {
       action={
         <button
           onClick={() => navigate('/admin/merchant/new')}
-          className="flex items-center gap-1.5 rounded-xl bg-cobalt-500 px-4 py-2 text-sm font-bold text-white shadow-cobalt-sm transition-colors hover:bg-cobalt-600 active:scale-[0.98]"
+          className="sheen flex items-center gap-1.5 rounded-xl bg-cobalt-500 px-4 py-2 text-sm font-bold text-white shadow-cobalt-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-cobalt-600 hover:shadow-e3 active:scale-[0.98]"
         >
           <Plus size={15} strokeWidth={2} /> Nouveau
         </button>
@@ -170,10 +170,10 @@ export default function AdminMerchantList() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.4) }}
-            className="group rounded-2xl border border-stone-200 bg-white p-5 transition-all duration-300 hover:border-cobalt-500/40 hover:shadow-card-hover dark:border-white/10 dark:bg-ink-900"
+            className="lift group rounded-2xl border border-black/[0.06] bg-white p-5 hover:border-cobalt-500/40 dark:border-white/[0.07] dark:bg-ink-900"
           >
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-cobalt-500/10 text-2xl">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-cobalt-500/10 text-2xl transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3">
                 {m.categorie.icone ?? '🏪'}
               </div>
               <div className="min-w-0 flex-1">

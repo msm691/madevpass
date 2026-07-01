@@ -54,16 +54,17 @@ export default function Annuaire() {
 
   return (
     <div className="grain relative min-h-screen overflow-hidden bg-cream pb-28 dark:bg-ink-950">
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-cobalt-500/15 blur-3xl" />
+      <div className="grid-bg pointer-events-none absolute inset-x-0 top-0 h-64 opacity-40 dark:opacity-25" />
+      <div className="aurora-blob -top-40 left-1/2 h-96 w-96 -translate-x-1/2 bg-cobalt-500/15" />
 
       <header className="relative px-6 pb-5 pt-12">
-        <h1 className="font-display text-2xl font-bold tracking-tight text-ink-900 dark:text-white">Annuaire</h1>
-        <p className="mt-1 text-sm text-cobalt-600 dark:text-cobalt-400">Partenaires étudiants à Vienne</p>
+        <p className="text-eyebrow uppercase text-cobalt-600 dark:text-cobalt-400">Partenaires · Vienne</p>
+        <h1 className="mt-1.5 font-display text-2xl font-bold tracking-tight text-ink-900 dark:text-white">Annuaire</h1>
 
         <div className="relative mt-5 flex items-center">
           <Search size={17} strokeWidth={1.75} className="pointer-events-none absolute left-4 text-stone-400" />
           <input
-            className="w-full rounded-xl border border-stone-300 bg-white px-11 py-3 text-sm text-ink-900 outline-none transition-colors placeholder:text-stone-400 focus:border-cobalt-500 dark:border-white/10 dark:bg-ink-900 dark:text-stone-100"
+            className="w-full rounded-xl border border-stone-300 bg-white px-11 py-3 text-sm text-ink-900 outline-none transition-all duration-200 placeholder:text-stone-400 focus:border-cobalt-500 focus:ring-2 focus:ring-cobalt-500/20 dark:border-white/10 dark:bg-ink-900 dark:text-stone-100"
             placeholder="Rechercher un commerce…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}

@@ -46,7 +46,7 @@ export default function Register() {
     submit(false)
   }
 
-  const input = 'w-full rounded-lg border border-stone-300 bg-white px-4 py-3 text-sm text-ink-900 outline-none transition-colors placeholder:text-stone-400 focus:border-cobalt-500 dark:border-white/10 dark:bg-ink-900 dark:text-stone-100 dark:placeholder:text-stone-500'
+  const input = 'w-full rounded-lg border border-stone-300 bg-white px-4 py-3 text-sm text-ink-900 outline-none transition-all duration-200 placeholder:text-stone-400 focus:border-cobalt-500 focus:ring-2 focus:ring-cobalt-500/20 dark:border-white/10 dark:bg-ink-900 dark:text-stone-100 dark:placeholder:text-stone-500'
   const label = 'mb-1.5 block text-sm font-medium text-stone-700 dark:text-stone-300'
 
   return (
@@ -70,17 +70,21 @@ export default function Register() {
         >
           {success ? (
             <div className="flex flex-col items-center text-center">
-              <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', damping: 14, stiffness: 260 }}
+                className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
+              >
                 <Check size={32} strokeWidth={2} />
-              </div>
+              </motion.div>
               <h2 className="font-display text-2xl font-bold text-ink-900 dark:text-white">Inscription reçue</h2>
               <p className="mt-3 text-sm leading-relaxed text-stone-500 dark:text-stone-400">
                 Votre demande est en attente de validation par un administrateur.
                 Vous pourrez vous connecter dès que votre dossier sera validé.
               </p>
               <motion.button
-                onClick={() => navigate('/login')} whileTap={{ scale: 0.98 }}
-                className="mt-7 w-full rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600"
+                onClick={() => navigate('/login')} whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}
+                className="sheen mt-7 w-full rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-all duration-300 hover:bg-cobalt-600 hover:shadow-e4"
               >
                 Retour à la connexion
               </motion.button>
@@ -135,8 +139,8 @@ export default function Register() {
                 )}
 
                 <motion.button
-                  type="submit" disabled={loading} whileTap={{ scale: 0.98 }}
-                  className="rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600 disabled:cursor-not-allowed disabled:opacity-60"
+                  type="submit" disabled={loading} whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}
+                  className="sheen rounded-xl bg-cobalt-500 py-3.5 font-bold text-white shadow-cobalt transition-all duration-300 hover:bg-cobalt-600 hover:shadow-e4 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {loading ? 'Envoi en cours…' : 'Envoyer ma demande'}
                 </motion.button>

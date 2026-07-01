@@ -136,13 +136,14 @@ export default function Profile() {
   const pending = user.statutSuppression === 'PENDING_DELETION'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-cream dark:bg-ink-950">
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
+    <div className="grain relative min-h-screen overflow-hidden bg-cream dark:bg-ink-950">
+      <div className="grid-bg pointer-events-none absolute inset-x-0 top-0 h-72 opacity-40 dark:opacity-25" />
+      <div className="aurora-blob -top-40 left-1/2 h-96 w-96 -translate-x-1/2 bg-cobalt-500/15" />
 
       <header className="relative flex items-start justify-between px-6 pb-8 pt-12">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[2px] text-primary-400">Informations</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink-900 dark:text-stone-50">{user.prenom} {user.nom}</h1>
+          <p className="text-eyebrow uppercase text-cobalt-600 dark:text-cobalt-400">Informations</p>
+          <h1 className="mt-1.5 font-display text-2xl font-bold tracking-tight text-ink-900 dark:text-white">{user.prenom} {user.nom}</h1>
         </div>
         <Navigation />
       </header>
@@ -153,7 +154,7 @@ export default function Profile() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
-          className="overflow-hidden rounded-2xl border border-stone-200 bg-white dark:border-ink-800 dark:bg-ink-900"
+          className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white shadow-e2 dark:border-white/[0.07] dark:bg-ink-900"
         >
           {([['Prénom', user.prenom], ['Nom', user.nom], ['Email', user.email]] as [string, string][]).map(([label, value]) => (
             <Row key={label} label={label}>

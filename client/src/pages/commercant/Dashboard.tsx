@@ -59,11 +59,14 @@ function KpiCard({ icon: Icon, value, label, delay }: { icon: React.ElementType;
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay }}
-      className="relative overflow-hidden rounded-2xl border border-stone-200 bg-white p-5 shadow-card dark:border-white/10 dark:bg-ink-900"
+      transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="lift group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-5 shadow-e2 dark:border-white/[0.07] dark:bg-ink-900"
     >
-      <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-cobalt-500/15 blur-2xl" />
-      <Icon size={18} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" />
+      <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-cobalt-500/70 via-cobalt-400/40 to-transparent" />
+      <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-cobalt-500/15 blur-2xl transition-opacity duration-300 group-hover:opacity-80" />
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cobalt-500/12 text-cobalt-600 transition-transform duration-300 group-hover:scale-110 dark:text-cobalt-300">
+        <Icon size={17} strokeWidth={1.9} />
+      </div>
       <span className="tnum mt-3 block font-display text-3xl font-bold leading-none tracking-tight text-ink-900 dark:text-white">{value}</span>
       <span className="mt-1.5 block text-xs font-medium text-stone-500 dark:text-stone-400">{label}</span>
     </motion.div>
@@ -151,11 +154,16 @@ export default function CommercantDashboard() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.15 }}
-          className="mt-4 rounded-2xl border border-stone-200 bg-white p-5 shadow-card dark:border-white/10 dark:bg-ink-900"
+          className="mt-4 rounded-3xl border border-black/[0.06] bg-white p-5 shadow-e3 dark:border-white/[0.07] dark:bg-ink-900"
         >
-          <div className="mb-4 flex items-center gap-2">
-            <TrendingUp size={16} strokeWidth={1.75} className="text-cobalt-600 dark:text-cobalt-400" />
-            <span className="text-sm font-semibold text-ink-900 dark:text-white">Affluence · 7 derniers jours</span>
+          <div className="mb-4 flex items-center gap-2.5">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-cobalt-500/12 text-cobalt-600 dark:text-cobalt-300">
+              <TrendingUp size={15} strokeWidth={1.9} />
+            </span>
+            <div>
+              <span className="block text-sm font-semibold text-ink-900 dark:text-white">Affluence</span>
+              <span className="block text-[11px] text-stone-400">7 derniers jours</span>
+            </div>
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={affluence} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
@@ -195,7 +203,7 @@ export default function CommercantDashboard() {
 
         <button
           onClick={() => navigate('/commercant/scanner')}
-          className="mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl bg-cobalt-500 py-4 text-base font-bold text-white shadow-cobalt transition-colors hover:bg-cobalt-600 active:scale-[0.99]"
+          className="sheen mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl bg-cobalt-500 py-4 text-base font-bold text-white shadow-cobalt transition-all duration-300 hover:-translate-y-0.5 hover:bg-cobalt-600 hover:shadow-e4 active:scale-[0.99]"
         >
           <ScanLine size={20} strokeWidth={1.75} />
           Scanner un QR
@@ -214,7 +222,7 @@ export default function CommercantDashboard() {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
-                className="rounded-2xl border border-stone-200 bg-white p-5 transition-colors hover:border-cobalt-500/40 dark:border-white/10 dark:bg-ink-900"
+                className="lift rounded-2xl border border-black/[0.06] bg-white p-5 hover:border-cobalt-500/40 dark:border-white/[0.07] dark:bg-ink-900"
               >
                 <div className="flex items-start justify-between gap-3">
                   <span className="flex items-center gap-2 font-semibold text-ink-900 dark:text-white">

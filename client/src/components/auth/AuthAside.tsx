@@ -7,8 +7,10 @@ interface Point { icon: React.ElementType; text: string }
 export default function AuthAside({ title, subtitle, points }: { title: string; subtitle: string; points: Point[] }) {
   return (
     <aside className="relative hidden overflow-hidden bg-ink-950 p-12 lg:flex lg:flex-col lg:justify-between">
-      <div className="pointer-events-none absolute -top-32 -left-24 h-96 w-96 rounded-full bg-cobalt-500/30 blur-[120px]" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cobalt-600/20 blur-[110px]" />
+      <div className="pointer-events-none absolute inset-0 bg-grid-line bg-grid opacity-[0.12]" />
+      <div className="aurora-blob -top-32 -left-24 h-96 w-96 bg-cobalt-500/30" />
+      <div className="aurora-blob bottom-0 right-0 h-80 w-80 bg-cobalt-600/20 [animation-delay:-8s]" />
+      <div className="aurora-blob left-[30%] top-[40%] h-72 w-72 bg-[#7C5CFF]/15 [animation-delay:-13s]" />
 
       <span className="relative flex items-center gap-2 font-display text-xl font-bold tracking-tight text-white">
         <span className="grid h-8 w-8 place-items-center rounded-lg bg-cobalt-500 text-sm font-black text-white shadow-cobalt-sm">M</span>
@@ -18,7 +20,7 @@ export default function AuthAside({ title, subtitle, points }: { title: string; 
       <div className="relative max-w-md">
         <motion.h2
           initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display text-4xl font-bold leading-tight tracking-tight text-white"
+          className="text-display-md leading-tight text-white"
         >
           {title}
         </motion.h2>
